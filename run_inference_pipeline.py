@@ -27,5 +27,5 @@ if __name__ == '__main__':
         postprocessed = postprocess(prediction)
 
         # Save the result
-        itk.imwrtie(postprocessed, os.path.join('predictions', case_name + '.nii.gz'))
+        itk.imwrite(postprocessed, os.path.join('predictions', case_name + '.nii.gz'))
 
