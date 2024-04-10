@@ -13,9 +13,9 @@ if __name__ == '__main__':
     with open('parameters.json', 'r') as f:
         config = json.load(f)
 
-    preprocessing.set_parameters(config['preprocessing'])
-    inferencing.set_parameters(config['inferencing'])
-    postprocessing.set_parameters(config['postprocessing'])
+    preprocess_filter = preprocessing.Preprocessing(config['preprocessing'])
+    inference_filter = inferencing.Inferencing(config['inferencing'])
+    postprocess_filter = postprocessing.Postprocessing(config['postprocessing'])
 
     image_filelist = sorted(glob.glob(os.path.join('images', '*.nii.gz')))
     
@@ -27,17 +27,14 @@ if __name__ == '__main__':
         # Get the image
         im = itk.imread(image_filelist[k])
 
-        # Set parameters
-
-
         # Run preprocessing steps
-        preprocessed = preprocessing.preprocess(im)
+        preprocessed = preprocess_filter.preprocess(im)
 
         # Run inference steps
-        prediction = inferencing.infer(preprocessed)
+        prediction = inference_filter.infer(preprocessed)
 
         # Run postprocessing steps
-        postprocessed = postprocessing.postprocess(prediction)
+        postprocessed = postprocess_filter.postprocess(prediction)
 
         # Save the result
         itk.imwrite(postprocessed, os.path.join('predictions', case_name + '.nii.gz'))
