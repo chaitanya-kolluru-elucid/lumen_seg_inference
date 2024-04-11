@@ -13,9 +13,9 @@ if __name__ == '__main__':
     with open('parameters.json', 'r') as f:
         config = json.load(f)
 
-    preprocess_filter = preprocessing.Preprocessing(config['preprocessing'])
-    inference_filter = inferencing.Inferencing(config['inferencing'])
-    postprocess_filter = postprocessing.Postprocessing(config['postprocessing'])
+    preprocess_filter = preprocessing.Preprocessing(config)
+    inference_filter = inferencing.Inferencing(config)
+    postprocess_filter = postprocessing.Postprocessing(config)
 
     image_filelist = sorted(glob.glob(os.path.join('images', '*.nii.gz')))
     

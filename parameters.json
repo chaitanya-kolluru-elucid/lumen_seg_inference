@@ -1,11 +1,21 @@
 {
     "preprocessing_parameters": {
-        "patch_size": [192, 192, 192],
-        "patch_overlap_ratio": [0.5, 0.5, 0.5]
+        "mean": 427.54730224609375,
+        "percentile_00_5": 81.0,
+        "percentile_99_5": 823.0,
+        "std": 139.19976806640625
     },
-    "inference_parameters": {
-        "model_checkpoint_filename": "checkpoint_best.pth"
+    "inferencing_parameters": {
+        "model_checkpoint_filename": "checkpoint_best.pth",
+        "model_architecture_filename": "model.pkl",
+        "device": "cuda"
     },
     "postprocessing_parameters": {
-      }
+    },
+    "common_parameters":{
+        "patch_size": [192, 192, 192],
+        "patch_overlap_ratio": [0.5, 0.5, 0.5],
+        "target_spacing": [0.25, 0.25, 0.25]
+    }
+
 }
