@@ -2,6 +2,7 @@ import glob
 import os
 import itk
 import json
+import numpy as np
 
 import preprocessing 
 import inferencing 
@@ -23,6 +24,8 @@ if __name__ == '__main__':
 
         # Get the case name
         case_name = os.path.basename(image_filelist[k]).split('_0000')[0]
+
+        print('Processing case: ' + case_name)
 
         # Get the image
         im = itk.imread(image_filelist[k])
