@@ -50,6 +50,8 @@ class Preprocessing:
         resampler.SetSize([int(sz * (spc_old / spc_new)) for sz, spc_old, spc_new in 
                            zip(im.GetLargestPossibleRegion().GetSize(), im.GetSpacing(), 
                                tuple(self.common_config['target_spacing']))])
+        resampler.SetOutputDirection(im.GetDirection())
+        resampler.SetOutputOrigin(im.GetOrigin())
         resampler.Update()
 
         return resampler.GetOutput()

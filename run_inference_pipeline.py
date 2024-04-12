@@ -28,7 +28,7 @@ if __name__ == '__main__':
         im = itk.imread(image_filelist[k])
 
         # Run preprocessing steps
-im        patches, num_patches, arr_shape = preprocess_filter.preprocess(im)
+        patches, num_patches, arr_shape = preprocess_filter.preprocess(im)
 
         # Run inference steps
         prediction_patches = inference_filter.infer(patches)
