@@ -1,3 +1,5 @@
 model_files/
 images/
 predictions/
+__pycache__/
+.vscode/

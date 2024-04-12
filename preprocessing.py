@@ -1,4 +1,4 @@
-import patchify
+from patchify import patchify
 import numpy as np
 import itk
 
@@ -11,17 +11,25 @@ class Preprocessing:
 
         im = self.resample_image(im)
         arr = itk.GetArrayFromImage(im)
+        arr = arr.astype(np.float32)
         arr = self.normalize_intensity(arr)
 
         patch_step_size = tuple([int(ps * por) for ps, por in 
                                  zip(self.common_config['patch_size'], 
-                                     self.common_config['patch_overlap_ratio'])])
+                                     self.common_config['patch_step_size_ratio'])])
+        
+        # TODO: Assuming same step size in all three dimensions
+        patch_step_size = patch_step_size[0]
 
         patches = patchify(arr, tuple(self.common_config['patch_size']), step = patch_step_size)
 
-        patches = patches.reshape(-1, self.common_config['patch_size'])
+        num_patches = [patches.shape[0], patches.shape[1], patches.shape[2]]
 
-        return patches
+        patches = patches.reshape(-1, self.common_config['patch_size'][0],
+                                  self.common_config['patch_size'][1],
+                                  self.common_config['patch_size'][2])
+
+        return patches, num_patches, arr.shape
     
     def normalize_intensity(self, arr):
 

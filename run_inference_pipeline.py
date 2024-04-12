@@ -28,13 +28,14 @@ if __name__ == '__main__':
         im = itk.imread(image_filelist[k])
 
         # Run preprocessing steps
-        preprocessed = preprocess_filter.preprocess(im)
+im        patches, num_patches, arr_shape = preprocess_filter.preprocess(im)
 
         # Run inference steps
-        prediction = inference_filter.infer(preprocessed)
+        prediction_patches = inference_filter.infer(patches)
 
         # Run postprocessing steps
-        postprocessed = postprocess_filter.postprocess(prediction)
+        postprocessed = postprocess_filter.postprocess(prediction_patches, num_patches, 
+                                                       arr_shape, im)
 
         # Save the result
         itk.imwrite(postprocessed, os.path.join('predictions', case_name + '.nii.gz'))
