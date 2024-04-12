@@ -15,6 +15,7 @@ class Inferencing:
             torch.set_num_threads(multiprocessing.cpu_count())
             self.device = torch.device('cpu')
 
+        #TODO: For hendrix, use gpu 1 for now
         elif self.config['device'] == 'cuda':
             torch.set_num_threads(1)
             torch.set_num_interop_threads(1)
@@ -28,20 +29,31 @@ class Inferencing:
             self.model = pickle.load(f)
     
     def infer(self, patches):       
-
         self.model.load_state_dict(self.checkpoint['network_weights'])
         self.model = self.model.to(self.device)
         self.model.eval()
 
         patches_predictions = np.zeros_like(patches)
         patches_tensor = torch.from_numpy(patches)
-        patches_tensor = patches_tensor.to(self.device)
 
-        for k in range(patches_tensor.shape[0]):
+        for k in range(0, patches_tensor.shape[0], self.config['batch_size']):            
 
-            patches_predictions[k,...] = torch.argmax(
-                                            torch.softmax(
-                                            self.model(patches_tensor[k,...].unsqueeze(0).unsqueeze(0)).squeeze(0),
-                                            axis = 0), axis = 0).cpu()
+            if k + self.config['batch_size'] <= patches_tensor.shape[0]:    
+                patches_batch = patches_tensor[k:k+self.config['batch_size'],...]        
+                patches_batch = patches_batch.to(self.device)
+
+                patches_predictions[k:k+self.config['batch_size'],...] = torch.argmax(
+                                                    torch.softmax(
+                                                    self.model(patches_batch.unsqueeze(1)).squeeze(0),
+                                                    axis = 1), axis = 1).cpu()
+            else:                            
+                patches_batch = patches_tensor[k:,...]
+                patches_batch = patches_batch.to(self.device)
+
+                patches_predictions[k:,...] = torch.argmax(
+                                                    torch.softmax(
+                                                    self.model(patches_batch.unsqueeze(1)).squeeze(0),
+                                                    axis = 1), axis = 1).cpu()
+
 
         return patches_predictions
