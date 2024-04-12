@@ -43,7 +43,7 @@ class Postprocessing:
         resampler.SetReferenceImage(original_im)
 
         # Set the interpolation method (e.g., linear, nearest neighbor, etc.)
-        resampler.SetInterpolator(itk.LinearInterpolateImageFunction.New(im))
+        resampler.SetInterpolator(itk.NearestNeighborInterpolateImageFunction.New(im))
 
         resampler.UseReferenceImageOn()
         

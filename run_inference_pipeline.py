@@ -3,6 +3,7 @@ import os
 import itk
 import json
 import numpy as np
+import time
 
 import preprocessing 
 import inferencing 
@@ -21,6 +22,8 @@ if __name__ == '__main__':
     image_filelist = sorted(glob.glob(os.path.join('images', '*.nii.gz')))
     
     for k in range(len(image_filelist)):
+
+        start = time.time()
 
         # Get the case name
         case_name = os.path.basename(image_filelist[k]).split('_0000')[0]
@@ -42,4 +45,6 @@ if __name__ == '__main__':
 
         # Save the result
         itk.imwrite(postprocessed, os.path.join('predictions', case_name + '.nii.gz'))
+
+        print('Processing this case took ' + str(time.time() - start) + ' seconds')
 
