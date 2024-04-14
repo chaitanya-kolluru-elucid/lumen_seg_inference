@@ -3,6 +3,7 @@ import itk
 import torch
 import os
 import pickle
+import datetime
 
 class Inferencing:
     def __init__(self, config):
@@ -28,7 +29,22 @@ class Inferencing:
         with open(os.path.join('model_files', self.config['model_architecture_filename']), 'rb') as f:
             self.model = pickle.load(f)
     
-    def infer(self, patches):       
+
+    def empty_cache(self):
+        if self.device.type == 'cuda':
+            torch.cuda.empty_cache()
+        elif self.device.type == 'mps':
+            from torch import mps
+            mps.empty_cache()
+        else:
+            pass
+
+    def infer(self, patches):     
+
+        self.empty_cache()
+
+        start = datetime.datetime.now()
+
         self.model.load_state_dict(self.checkpoint['network_weights'])
         self.model = self.model.to(self.device)
         self.model.eval()
@@ -36,24 +52,18 @@ class Inferencing:
         patches_predictions = np.zeros_like(patches)
         patches_tensor = torch.from_numpy(patches)
 
-        for k in range(0, patches_tensor.shape[0], self.config['batch_size']):            
+        with torch.inference_mode():
 
-            if k + self.config['batch_size'] <= patches_tensor.shape[0]:    
-                patches_batch = patches_tensor[k:k+self.config['batch_size'],...]        
+            for k in range(patches_tensor.shape[0]):            
+                    
+                patches_batch = patches_tensor[k,...]        
                 patches_batch = patches_batch.to(self.device)
 
-                patches_predictions[k:k+self.config['batch_size'],...] = torch.argmax(
+                patches_predictions[k,...] = torch.argmax(
                                                     torch.softmax(
-                                                    self.model(patches_batch.unsqueeze(1)).squeeze(0),
-                                                    axis = 1), axis = 1).cpu()
-            else:                            
-                patches_batch = patches_tensor[k:,...]
-                patches_batch = patches_batch.to(self.device)
+                                                    self.model(patches_batch.unsqueeze(0).unsqueeze(1)).squeeze(0),
+                                                    axis = 0), axis = 0).cpu()
 
-                patches_predictions[k:,...] = torch.argmax(
-                                                    torch.softmax(
-                                                    self.model(patches_batch.unsqueeze(1)).squeeze(0),
-                                                    axis = 1), axis = 1).cpu()
-
-
-        return patches_predictions
+            print('Inference took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
+            self.empty_cache()
+            return patches_predictions

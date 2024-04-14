@@ -9,7 +9,7 @@
         "model_checkpoint_filename": "checkpoint_best.pth",
         "model_architecture_filename": "model.pkl",
         "device": "cuda",
-        "batch_size": 2
+        "batch_size": 1
     },
     "postprocessing_config": {
     },
