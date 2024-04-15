@@ -4,4 +4,4 @@ predictions/
 __pycache__/
 inferencing_venv/
 *.pt
-*.log
+logs/*.log

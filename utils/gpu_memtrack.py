@@ -1,6 +1,7 @@
 import gc
 import datetime
 import inspect
+import os
 
 import torch
 import numpy as np
@@ -46,10 +47,10 @@ class MemTracker(object):
         verbose(bool, default False): whether show the trivial exception
         device(int): GPU number, default is 0
     """
-    def __init__(self, detail=True, path='', verbose=False, device=0):
+    def __init__(self, detail=True, path='.', verbose=False, device=0):
         self.print_detail = detail
         self.last_tensor_sizes = set()
-        self.gpu_profile_fn = path + f'{datetime.datetime.now():%d-%b-%y-%H:%M:%S}-gpu_mem_track.log'
+        self.gpu_profile_fn = os.path.join(path + '/logs', f'{datetime.datetime.now():%d-%b-%y-%H:%M:%S}-gpu_mem_track.log')
         self.verbose = verbose
         self.begin = True
         self.device = device
