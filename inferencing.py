@@ -21,20 +21,24 @@ class Inferencing:
             torch.set_num_threads(multiprocessing.cpu_count())
             self.device = torch.device('cpu')
 
-        #TODO: For hendrix, use gpu 1 for now
-        elif self.config['device'] == 'cuda':
+        elif self.config['device'] == 'gpu':
             torch.set_num_threads(self.common_config['torch_num_threads'])
             torch.set_num_interop_threads(1)
-            self.device = torch.device('cuda:1')
+            self.device = torch.device('cuda:' + self.config['gpu_to_use'])
 
         self.checkpoint =torch.load(os.path.join('model_files', 
                                     self.config['model_checkpoint_filename']),
                                     map_location=torch.device('cpu'))
         
         with open(os.path.join('model_files', self.config['model_architecture_filename']), 'rb') as f:
-            self.model = pickle.load(f)
-    
-        self.results_device = self.device
+            self.model = pickle.load(f)    
+
+        if self.config['results_device'] == 'cpu':
+            self.results_device = torch.device('cpu')
+
+        elif self.config['results_device'] == 'gpu':
+            self.results_device = torch.device('cuda:' + self.config['gpu_to_use'])
+
         if self.config['use_gaussian_smoothing']:
             self.weights = self.compute_gaussian()
         else:
