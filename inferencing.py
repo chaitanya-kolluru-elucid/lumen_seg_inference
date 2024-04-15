@@ -5,9 +5,13 @@ import os
 import pickle
 import datetime
 from scipy.ndimage import gaussian_filter
+from utils.gpu_memtrack import MemTracker
 
 class Inferencing:
     def __init__(self, config):
+
+        self.tracker = MemTracker()
+
         self.config = config['inferencing_config']
         self.common_config = config['common_config']
 
@@ -30,6 +34,7 @@ class Inferencing:
         with open(os.path.join('model_files', self.config['model_architecture_filename']), 'rb') as f:
             self.model = pickle.load(f)
     
+        self.results_device = self.device
         if self.config['use_gaussian_smoothing']:
             self.weights = self.compute_gaussian()
         else:
@@ -58,7 +63,7 @@ class Inferencing:
         gaussian_importance_map = torch.from_numpy(gaussian_importance_map)
 
         gaussian_importance_map /= (torch.max(gaussian_importance_map) / value_scaling_factor)
-        gaussian_importance_map = gaussian_importance_map.to(device='cpu', dtype=torch.float16)
+        gaussian_importance_map = gaussian_importance_map.to(device=self.results_device, dtype=torch.float16)
         
         # gaussian_importance_map cannot be 0, otherwise we may end up with nans!
         mask = gaussian_importance_map == 0
@@ -71,13 +76,17 @@ class Inferencing:
 
         start = datetime.datetime.now()
 
+        self.tracker.track()
         self.model.load_state_dict(self.checkpoint['network_weights'])
         self.model = self.model.to(self.device)
         self.model.eval()
+        self.tracker.track()
 
         arr_tensor = torch.from_numpy(arr)
-        predictions = torch.zeros((self.config['num_output_labels'], *arr.shape[1:]), dtype=torch.half)
-        n_predictions = torch.zeros(arr.shape[1:], dtype=torch.half)
+        predictions = torch.zeros((self.config['num_output_labels'], *arr.shape[1:]), dtype=torch.half, device=self.results_device)
+        n_predictions = torch.zeros(arr.shape[1:], dtype=torch.half, device=self.results_device)
+        self.tracker.track()
+
 
         with torch.inference_mode():
 
@@ -85,7 +94,7 @@ class Inferencing:
                 patch = arr_tensor[sl][None]
                 patch = patch.to(self.device)
 
-                predictions[sl] +=  torch.softmax(self.model(patch).squeeze(0), axis = 0).cpu()
+                predictions[sl] +=  torch.softmax(self.model(patch).squeeze(0), axis = 0).to(self.results_device)
                 n_predictions[sl[1:]] += self.weights
 
             print('Inference took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
@@ -96,7 +105,7 @@ class Inferencing:
             
             start = datetime.datetime.now()
             predictions = predictions.to(self.device)
-            print('Moving predictions from cpu to gpu took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
+            print('Moving predictions to the device took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
 
             start = datetime.datetime.now()
             predictions = torch.argmax(predictions, axis = 0).cpu()
@@ -104,4 +113,6 @@ class Inferencing:
             print('Predictions argmax took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
 
         self.empty_cache()
+        self.tracker.track()
+
         return predictions

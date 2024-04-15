@@ -3,3 +3,4 @@ images/
 predictions/
 __pycache__/
 *.pt
+*.log
