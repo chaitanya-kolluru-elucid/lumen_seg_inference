@@ -5,6 +5,9 @@ import inspect
 import torch
 import numpy as np
 
+import warnings
+warnings.filterwarnings("ignore", message="torch.distributed.reduce_op is deprecated, please use torch.distributed.ReduceOp instead")
+
 dtype_memory_size_dict = {
     torch.float64: 64/8,
     torch.double: 64/8,

@@ -1,4 +1,3 @@
-from patchify import patchify
 import numpy as np
 import itk
 from torch.nn import functional as F

@@ -2,5 +2,6 @@ model_files/
 images/
 predictions/
 __pycache__/
+inferencing_venv/
 *.pt
 *.log
