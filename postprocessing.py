@@ -7,23 +7,11 @@ class Postprocessing:
         self.config = config['postprocessing_config']
         self.common_config = config['common_config']
 
-    def postprocess(self, prediction_patches, num_patches, arr_shape, original_im):
+    def postprocess(self, prediction, slicer_to_revert_padding, original_im):
 
-        prediction_patches = prediction_patches.reshape(num_patches[0], num_patches[1], num_patches[2],
-                                                        prediction_patches.shape[1], prediction_patches.shape[2],
-                                                        prediction_patches.shape[3])
-        
-        s_h = int(((arr_shape[0] - self.common_config['patch_size'][0] )/ (num_patches[0] - 1)) + 1)
-        s_w = int(((arr_shape[1] - self.common_config['patch_size'][1] )/ (num_patches[1] - 1)) + 1)
-        s_c = int(((arr_shape[2] - self.common_config['patch_size'][2] )/ (num_patches[2] - 1)) + 1)
+        prediction = prediction[*slicer_to_revert_padding]
 
-        pad_size_h = int(((num_patches[0] - 1) * s_h) + self.common_config['patch_size'][0])
-        pad_size_w = int(((num_patches[1] - 1) * s_w) + self.common_config['patch_size'][1])
-        pad_size_c = int(((num_patches[2] - 1) * s_c) + self.common_config['patch_size'][2])
-
-        prediction_patches = unpatchify(prediction_patches, (pad_size_h, pad_size_w, pad_size_c)).astype(np.uint8)
-
-        im = itk.GetImageFromArray(prediction_patches)
+        im = itk.GetImageFromArray(prediction)
         im.SetDirection(original_im.GetDirection())
         im.SetOrigin(original_im.GetOrigin())
         im.SetSpacing(self.common_config['target_spacing'])

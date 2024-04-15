@@ -23,25 +23,24 @@ if __name__ == '__main__':
     
     for k in range(len(image_filelist)):
 
-        start = time.time()
-
         # Get the case name
-        case_name = os.path.basename(image_filelist[k]).split('_0000')[0]
+        case_name = os.path.basename(image_filelist[k]).split('_0000.nii.gz')[0]
 
         print('Processing case: ' + case_name)
+
+        start = time.time()
 
         # Get the image
         im = itk.imread(image_filelist[k])
 
         # Run preprocessing steps
-        patches, num_patches, arr_shape = preprocess_filter.preprocess(im)
+        arr, slicer_to_revert_padding, slicers = preprocess_filter.preprocess(im)
 
         # Run inference steps
-        prediction_patches = inference_filter.infer(patches)
+        prediction = inference_filter.infer(arr, slicers)
 
         # Run postprocessing steps
-        postprocessed = postprocess_filter.postprocess(prediction_patches, num_patches, 
-                                                       arr_shape, im)
+        postprocessed = postprocess_filter.postprocess(prediction, slicer_to_revert_padding, im)
 
         # Save the result
         itk.imwrite(postprocessed, os.path.join('predictions', case_name + '.nii.gz'))

@@ -4,6 +4,7 @@ import torch
 import os
 import pickle
 import datetime
+from scipy.ndimage import gaussian_filter
 
 class Inferencing:
     def __init__(self, config):
@@ -18,7 +19,7 @@ class Inferencing:
 
         #TODO: For hendrix, use gpu 1 for now
         elif self.config['device'] == 'cuda':
-            torch.set_num_threads(1)
+            torch.set_num_threads(self.common_config['torch_num_threads'])
             torch.set_num_interop_threads(1)
             self.device = torch.device('cuda:1')
 
@@ -29,6 +30,10 @@ class Inferencing:
         with open(os.path.join('model_files', self.config['model_architecture_filename']), 'rb') as f:
             self.model = pickle.load(f)
     
+        if self.config['use_gaussian_smoothing']:
+            self.weights = self.compute_gaussian()
+        else:
+            self.weights = 1
 
     def empty_cache(self):
         if self.device.type == 'cuda':
@@ -39,7 +44,28 @@ class Inferencing:
         else:
             pass
 
-    def infer(self, patches):     
+    def compute_gaussian(self):
+        
+        sigma_scale = 1. / 8
+        value_scaling_factor = 1.
+
+        tmp = np.zeros(self.common_config['patch_size'])
+        center_coords = [i // 2 for i in self.common_config['patch_size']]
+        sigmas = [i * sigma_scale for i in self.common_config['patch_size']]
+        tmp[tuple(center_coords)] = 1
+
+        gaussian_importance_map = gaussian_filter(tmp, sigmas, 0, mode='constant', cval=0)
+        gaussian_importance_map = torch.from_numpy(gaussian_importance_map)
+
+        gaussian_importance_map /= (torch.max(gaussian_importance_map) / value_scaling_factor)
+        gaussian_importance_map = gaussian_importance_map.to(device='cpu', dtype=torch.float16)
+        
+        # gaussian_importance_map cannot be 0, otherwise we may end up with nans!
+        mask = gaussian_importance_map == 0
+        gaussian_importance_map[mask] = torch.min(gaussian_importance_map[~mask])
+        return gaussian_importance_map
+
+    def infer(self, arr, slicers):     
 
         self.empty_cache()
 
@@ -49,21 +75,33 @@ class Inferencing:
         self.model = self.model.to(self.device)
         self.model.eval()
 
-        patches_predictions = np.zeros_like(patches)
-        patches_tensor = torch.from_numpy(patches)
+        arr_tensor = torch.from_numpy(arr)
+        predictions = torch.zeros((self.config['num_output_labels'], *arr.shape[1:]), dtype=torch.half)
+        n_predictions = torch.zeros(arr.shape[1:], dtype=torch.half)
 
         with torch.inference_mode():
 
-            for k in range(patches_tensor.shape[0]):            
-                    
-                patches_batch = patches_tensor[k,...]        
-                patches_batch = patches_batch.to(self.device)
+            for sl in slicers:
+                patch = arr_tensor[sl][None]
+                patch = patch.to(self.device)
 
-                patches_predictions[k,...] = torch.argmax(
-                                                    torch.softmax(
-                                                    self.model(patches_batch.unsqueeze(0).unsqueeze(1)).squeeze(0),
-                                                    axis = 0), axis = 0).cpu()
+                predictions[sl] +=  torch.softmax(self.model(patch).squeeze(0), axis = 0).cpu()
+                n_predictions[sl[1:]] += self.weights
 
             print('Inference took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
-            self.empty_cache()
-            return patches_predictions
+
+            start = datetime.datetime.now()
+            predictions /= n_predictions
+            print('Division took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')            
+            
+            start = datetime.datetime.now()
+            predictions = predictions.to(self.device)
+            print('Moving predictions from cpu to gpu took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
+
+            start = datetime.datetime.now()
+            predictions = torch.argmax(predictions, axis = 0).cpu()
+            predictions = np.array(predictions, dtype=np.uint8)
+            print('Predictions argmax took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
+
+        self.empty_cache()
+        return predictions
