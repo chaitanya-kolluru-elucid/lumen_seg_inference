@@ -97,7 +97,6 @@ class Inferencing:
         n_predictions = torch.zeros(arr.shape[1:], dtype=torch.half, device=self.results_device)
         self.gpu_mem_tracker.track()
 
-
         with torch.inference_mode():
 
             for sl in slicers:
@@ -117,15 +116,7 @@ class Inferencing:
             self.logger.info('Division took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')            
             
             start = datetime.datetime.now()
-            predictions = predictions.to(self.device)
-            self.logger.info('Moving predictions to the device took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
-
-            start = datetime.datetime.now()
-            predictions = predictions.cpu()
-            self.logger.info('Moving predictions to cpu took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
-            
-            start = datetime.datetime.now()
-            predictions = torch.argmax(predictions, axis = 0)
+            predictions = torch.argmax(predictions, axis = 0).cpu()
             predictions = np.array(predictions, dtype=np.uint8)
             self.logger.info('Predictions argmax took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
 
