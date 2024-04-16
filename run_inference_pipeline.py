@@ -23,7 +23,7 @@ if __name__ == '__main__':
     inference_filter = inferencing.Inferencing(config)
     postprocess_filter = postprocessing.Postprocessing(config)
 
-    image_filelist = sorted(glob.glob(os.path.join('images', '*.nii.gz')))
+    image_filelist = sorted(glob.glob(os.path.join(config['common_config']['images_dir'], '*.nii.gz')))
     
     for k in range(len(image_filelist)):
 
@@ -47,7 +47,7 @@ if __name__ == '__main__':
         postprocessed = postprocess_filter.postprocess(prediction, slicer_to_revert_padding, im)
 
         # Save the result
-        itk.imwrite(postprocessed, os.path.join('predictions', case_name + '.nii.gz'))
+        itk.imwrite(postprocessed, os.path.join(config['common_config']['preds_dir'], case_name + '.nii.gz'))
 
         logging_handle.info('Processing this case took ' + str(time.time() - start) + ' seconds')
 

@@ -1,0 +1,218 @@
+2024-04-16 16:27:51,255 - Inferencing - INFO - Inference will be done on device: gpu
+2024-04-16 16:27:51,255 - Inferencing - INFO - Results will be processed on device: gpu
+2024-04-16 16:27:51,257 - __main__ - INFO - Processing case: Christ_0042
+2024-04-16 16:30:01,490 - Inferencing - INFO - Inference took 123 seconds.
+2024-04-16 16:30:02,501 - Inferencing - INFO - Division took 1 seconds.
+2024-04-16 16:30:05,084 - Inferencing - INFO - Predictions argmax took 2 seconds.
+2024-04-16 16:30:06,254 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 16:30:06,583 - __main__ - INFO - Processing this case took 135.32592940330505 seconds
+2024-04-16 16:30:06,583 - __main__ - INFO - Processing case: E100_0006
+2024-04-16 16:33:22,038 - Inferencing - INFO - Inference took 189 seconds.
+2024-04-16 16:33:23,089 - Inferencing - INFO - Division took 1 seconds.
+2024-04-16 16:33:29,089 - Inferencing - INFO - Predictions argmax took 6 seconds.
+2024-04-16 16:33:30,584 - Postprocessing - INFO - Number of connected objects in aorta mask: 3
+2024-04-16 16:33:30,850 - __main__ - INFO - Processing this case took 204.2667531967163 seconds
+2024-04-16 16:33:30,850 - __main__ - INFO - Processing case: E100_0028
+2024-04-16 16:34:10,155 - Inferencing - INFO - Inference took 37 seconds.
+2024-04-16 16:34:11,144 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 16:34:12,112 - Inferencing - INFO - Predictions argmax took 0 seconds.
+2024-04-16 16:34:13,115 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 16:34:13,462 - __main__ - INFO - Processing this case took 42.61227369308472 seconds
+2024-04-16 16:34:13,462 - __main__ - INFO - Processing case: E100_0045
+2024-04-16 16:34:47,888 - Inferencing - INFO - Inference took 32 seconds.
+2024-04-16 16:34:48,883 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 16:34:49,848 - Inferencing - INFO - Predictions argmax took 0 seconds.
+2024-04-16 16:34:50,832 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 16:34:51,089 - __main__ - INFO - Processing this case took 37.62698173522949 seconds
+2024-04-16 16:34:51,089 - __main__ - INFO - Processing case: E100_0118
+2024-04-16 16:35:24,277 - Inferencing - INFO - Inference took 31 seconds.
+2024-04-16 16:35:25,259 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 16:35:26,086 - Inferencing - INFO - Predictions argmax took 0 seconds.
+2024-04-16 16:35:27,076 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 16:35:27,384 - __main__ - INFO - Processing this case took 36.294949531555176 seconds
+2024-04-16 16:35:27,385 - __main__ - INFO - Processing case: HolyCross_005
+2024-04-16 16:36:43,788 - Inferencing - INFO - Inference took 73 seconds.
+2024-04-16 16:36:44,788 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 16:36:46,870 - Inferencing - INFO - Predictions argmax took 2 seconds.
+2024-04-16 16:36:47,994 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 16:36:48,331 - __main__ - INFO - Processing this case took 80.94595837593079 seconds
+2024-04-16 16:36:48,331 - __main__ - INFO - Processing case: HolyCross_021
+2024-04-16 16:37:40,949 - Inferencing - INFO - Inference took 50 seconds.
+2024-04-16 16:37:41,967 - Inferencing - INFO - Division took 1 seconds.
+2024-04-16 16:37:43,495 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 16:37:44,554 - Postprocessing - INFO - Number of connected objects in aorta mask: 2
+2024-04-16 16:37:44,855 - __main__ - INFO - Processing this case took 56.524290323257446 seconds
+2024-04-16 16:37:44,855 - __main__ - INFO - Processing case: HolyCross_097
+2024-04-16 16:38:57,016 - Inferencing - INFO - Inference took 69 seconds.
+2024-04-16 16:38:58,013 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 16:38:59,691 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 16:39:00,773 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 16:39:01,133 - __main__ - INFO - Processing this case took 76.27767705917358 seconds
+2024-04-16 16:39:01,133 - __main__ - INFO - Processing case: MUSC_FFR2_008
+2024-04-16 16:40:04,158 - Inferencing - INFO - Inference took 60 seconds.
+2024-04-16 16:40:05,181 - Inferencing - INFO - Division took 1 seconds.
+2024-04-16 16:40:06,909 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 16:40:08,010 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 16:40:08,461 - __main__ - INFO - Processing this case took 67.32812023162842 seconds
+2024-04-16 16:40:08,461 - __main__ - INFO - Processing case: MUSC_FFR2_048
+2024-04-16 16:40:59,242 - Inferencing - INFO - Inference took 47 seconds.
+2024-04-16 16:41:00,204 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 16:41:01,754 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 16:41:02,838 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 16:41:03,270 - __main__ - INFO - Processing this case took 54.808576583862305 seconds
+2024-04-16 16:41:03,270 - __main__ - INFO - Processing case: MUSC_FFR2_054
+2024-04-16 16:41:55,201 - Inferencing - INFO - Inference took 48 seconds.
+2024-04-16 16:41:56,166 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 16:41:57,527 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 16:41:58,612 - Postprocessing - INFO - Number of connected objects in aorta mask: 3
+2024-04-16 16:41:59,171 - __main__ - INFO - Processing this case took 55.90056610107422 seconds
+2024-04-16 16:41:59,171 - __main__ - INFO - Processing case: MUSC_FFR2_081
+2024-04-16 16:42:49,978 - Inferencing - INFO - Inference took 47 seconds.
+2024-04-16 16:42:50,964 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 16:42:52,493 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 16:42:53,588 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 16:42:54,055 - __main__ - INFO - Processing this case took 54.88451886177063 seconds
+2024-04-16 16:42:54,056 - __main__ - INFO - Processing case: MUSC_FFR2_106
+2024-04-16 16:43:56,710 - Inferencing - INFO - Inference took 60 seconds.
+2024-04-16 16:43:57,711 - Inferencing - INFO - Division took 1 seconds.
+2024-04-16 16:43:59,124 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 16:44:00,167 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 16:44:00,569 - __main__ - INFO - Processing this case took 66.5134220123291 seconds
+2024-04-16 16:44:00,569 - __main__ - INFO - Processing case: MUSC_FFR2_183
+2024-04-16 16:45:03,781 - Inferencing - INFO - Inference took 60 seconds.
+2024-04-16 16:45:04,781 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 16:45:06,562 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 16:45:07,666 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 16:45:08,127 - __main__ - INFO - Processing this case took 67.55765175819397 seconds
+2024-04-16 16:45:08,127 - __main__ - INFO - Processing case: MUSC_FFR2_204
+2024-04-16 16:46:49,462 - Inferencing - INFO - Inference took 97 seconds.
+2024-04-16 16:46:50,472 - Inferencing - INFO - Division took 1 seconds.
+2024-04-16 16:46:52,881 - Inferencing - INFO - Predictions argmax took 2 seconds.
+2024-04-16 16:46:54,106 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 16:46:54,634 - __main__ - INFO - Processing this case took 106.5072250366211 seconds
+2024-04-16 16:46:54,634 - __main__ - INFO - Processing case: MUSC_FFR2_207
+2024-04-16 16:50:02,333 - Inferencing - INFO - Inference took 180 seconds.
+2024-04-16 16:50:03,356 - Inferencing - INFO - Division took 1 seconds.
+2024-04-16 16:50:07,950 - Inferencing - INFO - Predictions argmax took 4 seconds.
+2024-04-16 16:50:09,414 - Postprocessing - INFO - Number of connected objects in aorta mask: 44
+2024-04-16 16:50:10,334 - __main__ - INFO - Processing this case took 195.69988656044006 seconds
+2024-04-16 16:50:10,334 - __main__ - INFO - Processing case: MUSC_FFR2_220
+2024-04-16 16:51:03,272 - Inferencing - INFO - Inference took 50 seconds.
+2024-04-16 16:51:04,265 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 16:51:05,671 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 16:51:06,738 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 16:51:07,126 - __main__ - INFO - Processing this case took 56.79183030128479 seconds
+2024-04-16 16:51:07,126 - __main__ - INFO - Processing case: MUSC_FFR3_027
+2024-04-16 16:51:59,848 - Inferencing - INFO - Inference took 50 seconds.
+2024-04-16 16:52:00,837 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 16:52:02,177 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 16:52:03,214 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 16:52:03,572 - __main__ - INFO - Processing this case took 56.44556474685669 seconds
+2024-04-16 16:52:03,572 - __main__ - INFO - Processing case: MUSC_FFR3_087
+2024-04-16 16:52:56,435 - Inferencing - INFO - Inference took 50 seconds.
+2024-04-16 16:52:57,420 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 16:52:58,779 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 16:52:59,818 - Postprocessing - INFO - Number of connected objects in aorta mask: 2
+2024-04-16 16:53:00,203 - __main__ - INFO - Processing this case took 56.630610704422 seconds
+2024-04-16 16:53:00,203 - __main__ - INFO - Processing case: OLVZ_00001
+2024-04-16 16:53:50,196 - Inferencing - INFO - Inference took 47 seconds.
+2024-04-16 16:53:51,186 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 16:53:52,563 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 16:53:53,597 - Postprocessing - INFO - Number of connected objects in aorta mask: 2
+2024-04-16 16:53:53,887 - __main__ - INFO - Processing this case took 53.684417963027954 seconds
+2024-04-16 16:53:53,888 - __main__ - INFO - Processing case: OLVZ_00005
+2024-04-16 16:54:46,310 - Inferencing - INFO - Inference took 50 seconds.
+2024-04-16 16:54:47,301 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 16:54:48,605 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 16:54:49,626 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 16:54:49,923 - __main__ - INFO - Processing this case took 56.0355064868927 seconds
+2024-04-16 16:54:49,923 - __main__ - INFO - Processing case: OLVZ_00021
+2024-04-16 16:56:36,259 - Inferencing - INFO - Inference took 102 seconds.
+2024-04-16 16:56:37,270 - Inferencing - INFO - Division took 1 seconds.
+2024-04-16 16:56:40,300 - Inferencing - INFO - Predictions argmax took 3 seconds.
+2024-04-16 16:56:41,520 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 16:56:41,895 - __main__ - INFO - Processing this case took 111.97161650657654 seconds
+2024-04-16 16:56:41,895 - __main__ - INFO - Processing case: OLVZ_00033
+2024-04-16 16:57:31,936 - Inferencing - INFO - Inference took 47 seconds.
+2024-04-16 16:57:32,926 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 16:57:34,291 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 16:57:35,327 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 16:57:35,646 - __main__ - INFO - Processing this case took 53.750975370407104 seconds
+2024-04-16 16:57:35,646 - __main__ - INFO - Processing case: Postcard_0160
+2024-04-16 16:58:48,607 - Inferencing - INFO - Inference took 69 seconds.
+2024-04-16 16:58:49,605 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 16:58:51,603 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 16:58:52,756 - Postprocessing - INFO - Number of connected objects in aorta mask: 2
+2024-04-16 16:58:53,261 - __main__ - INFO - Processing this case took 77.61445760726929 seconds
+2024-04-16 16:58:53,261 - __main__ - INFO - Processing case: musc022
+2024-04-16 16:59:56,116 - Inferencing - INFO - Inference took 60 seconds.
+2024-04-16 16:59:57,110 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 16:59:58,865 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 16:59:59,949 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 17:00:00,433 - __main__ - INFO - Processing this case took 67.1718864440918 seconds
+2024-04-16 17:00:00,433 - __main__ - INFO - Processing case: musc040
+2024-04-16 17:00:50,097 - Inferencing - INFO - Inference took 47 seconds.
+2024-04-16 17:00:51,084 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 17:00:52,324 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 17:00:53,325 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 17:00:53,555 - __main__ - INFO - Processing this case took 53.12191343307495 seconds
+2024-04-16 17:00:53,555 - __main__ - INFO - Processing case: musc042
+2024-04-16 17:01:43,362 - Inferencing - INFO - Inference took 47 seconds.
+2024-04-16 17:01:44,352 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 17:01:45,666 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 17:01:46,683 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 17:01:46,956 - __main__ - INFO - Processing this case took 53.40078520774841 seconds
+2024-04-16 17:01:46,956 - __main__ - INFO - Processing case: musc050
+2024-04-16 17:03:02,938 - Inferencing - INFO - Inference took 73 seconds.
+2024-04-16 17:03:03,959 - Inferencing - INFO - Division took 1 seconds.
+2024-04-16 17:03:05,989 - Inferencing - INFO - Predictions argmax took 2 seconds.
+2024-04-16 17:03:07,073 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 17:03:07,361 - __main__ - INFO - Processing this case took 80.40469312667847 seconds
+2024-04-16 17:03:07,361 - __main__ - INFO - Processing case: musc052
+2024-04-16 17:04:09,251 - Inferencing - INFO - Inference took 60 seconds.
+2024-04-16 17:04:10,247 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 17:04:11,647 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 17:04:12,660 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 17:04:12,880 - __main__ - INFO - Processing this case took 65.51867961883545 seconds
+2024-04-16 17:04:12,880 - __main__ - INFO - Processing case: musc062
+2024-04-16 17:05:29,621 - Inferencing - INFO - Inference took 73 seconds.
+2024-04-16 17:05:30,623 - Inferencing - INFO - Division took 1 seconds.
+2024-04-16 17:05:32,815 - Inferencing - INFO - Predictions argmax took 2 seconds.
+2024-04-16 17:05:33,971 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 17:05:34,472 - __main__ - INFO - Processing this case took 81.5923855304718 seconds
+2024-04-16 17:05:34,472 - __main__ - INFO - Processing case: musc064
+2024-04-16 17:06:36,789 - Inferencing - INFO - Inference took 60 seconds.
+2024-04-16 17:06:37,784 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 17:06:39,305 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 17:06:40,377 - Postprocessing - INFO - Number of connected objects in aorta mask: 7
+2024-04-16 17:06:40,712 - __main__ - INFO - Processing this case took 66.23962068557739 seconds
+2024-04-16 17:06:40,712 - __main__ - INFO - Processing case: musc070
+2024-04-16 17:07:32,974 - Inferencing - INFO - Inference took 50 seconds.
+2024-04-16 17:07:33,966 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 17:07:35,316 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 17:07:36,342 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 17:07:36,595 - __main__ - INFO - Processing this case took 55.882824420928955 seconds
+2024-04-16 17:07:36,595 - __main__ - INFO - Processing case: musc071
+2024-04-16 17:08:29,087 - Inferencing - INFO - Inference took 50 seconds.
+2024-04-16 17:08:30,083 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 17:08:31,681 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 17:08:32,724 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 17:08:32,978 - __main__ - INFO - Processing this case took 56.38241696357727 seconds
+2024-04-16 17:08:32,978 - __main__ - INFO - Processing case: musc084
+2024-04-16 17:09:44,942 - Inferencing - INFO - Inference took 69 seconds.
+2024-04-16 17:09:45,937 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 17:09:47,721 - Inferencing - INFO - Predictions argmax took 1 seconds.
+2024-04-16 17:09:48,797 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 17:09:49,070 - __main__ - INFO - Processing this case took 76.09274005889893 seconds
+2024-04-16 17:09:49,071 - __main__ - INFO - Processing case: musc096
+2024-04-16 17:11:05,185 - Inferencing - INFO - Inference took 73 seconds.
+2024-04-16 17:11:06,181 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 17:11:08,255 - Inferencing - INFO - Predictions argmax took 2 seconds.
+2024-04-16 17:11:09,352 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 17:11:09,627 - __main__ - INFO - Processing this case took 80.55593132972717 seconds
+2024-04-16 17:11:09,627 - __main__ - INFO - Processing case: musc101
+2024-04-16 17:12:25,488 - Inferencing - INFO - Inference took 73 seconds.
+2024-04-16 17:12:26,486 - Inferencing - INFO - Division took 0 seconds.
+2024-04-16 17:12:28,530 - Inferencing - INFO - Predictions argmax took 2 seconds.
+2024-04-16 17:12:29,617 - Postprocessing - INFO - Number of connected objects in aorta mask: 1
+2024-04-16 17:12:29,863 - __main__ - INFO - Processing this case took 80.23603129386902 seconds

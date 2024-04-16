@@ -12,6 +12,3 @@ inferencing_venv/
 model_files/*.pth 
 model_files/*.pt
 model_files/*.pkl
-
-# Log files
-logs/*.log

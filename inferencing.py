@@ -44,11 +44,15 @@ class Inferencing:
             self.weights = self.compute_gaussian()
         else:
             self.weights = 1
+
+        if self.config['disable_cuda_allocator_caching']:
+            os.environ['PYTORCH_NO_CUDA_MEMORY_CACHING'] = '1'
         
         # Create a logger object
         self.logger = logger.getLogger('Inferencing')        
         self.logger.info('Inference will be done on device: ' + self.config['device'])
         self.logger.info('Results will be processed on device: ' + self.config['results_device'])
+        self.logger.info('Pytorch cuda caching allocator has been set to: ' + str(self.config['disable_cuda_allocator_caching']))
 
     def empty_cache(self):
         if self.device.type == 'cuda':
