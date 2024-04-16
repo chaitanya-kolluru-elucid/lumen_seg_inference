@@ -6,6 +6,7 @@ import pickle
 import datetime
 from scipy.ndimage import gaussian_filter
 from utils.gpu_memtrack import MemTracker
+from utils.logger_config import logger
 
 class Inferencing:
     def __init__(self, config):
@@ -43,6 +44,9 @@ class Inferencing:
             self.weights = self.compute_gaussian()
         else:
             self.weights = 1
+        
+        # Create a logger object
+        self.logger = logger.getLogger('Inferencing')
 
     def empty_cache(self):
         if self.device.type == 'cuda':
@@ -101,20 +105,21 @@ class Inferencing:
                 predictions[sl] +=  torch.softmax(self.model(patch).squeeze(0), axis = 0).to(self.results_device)
                 n_predictions[sl[1:]] += self.weights
 
-            print('Inference took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
+            self.logger.info('Inference took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
 
             start = datetime.datetime.now()
             predictions /= n_predictions
-            print('Division took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')            
+            self.logger.info('Division took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')            
             
             start = datetime.datetime.now()
             predictions = predictions.to(self.device)
-            print('Moving predictions to the device took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
+            self.logger.info('Moving predictions to the device took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
 
             start = datetime.datetime.now()
-            predictions = torch.argmax(predictions, axis = 0).cpu()
+            predictions = predictions.cpu()
+            predictions = torch.argmax(predictions, axis = 0)
             predictions = np.array(predictions, dtype=np.uint8)
-            print('Predictions argmax took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
+            self.logger.info('Predictions argmax took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
 
         self.empty_cache()
         self.tracker.track()

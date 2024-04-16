@@ -2,11 +2,15 @@ import numpy as np
 import itk
 from torch.nn import functional as F
 import torch
+from utils.logger_config import logger
 
 class Preprocessing:
     def __init__(self, config):
         self.config = config['preprocessing_config']
         self.common_config = config['common_config']
+
+        # Create a logger object
+        self.logger = logger.getLogger('Preprocessing')
 
     def preprocess(self, im):
 

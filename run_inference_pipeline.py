@@ -9,7 +9,11 @@ import preprocessing
 import inferencing 
 import postprocessing 
 
+from utils.logger_config import logger
+
 if __name__ == '__main__':
+
+    logging_handle = logger.getLogger('__main__')
 
     # Read and set config parameters
     with open('parameters.json', 'r') as f:
@@ -26,7 +30,7 @@ if __name__ == '__main__':
         # Get the case name
         case_name = os.path.basename(image_filelist[k]).split('_0000.nii.gz')[0]
 
-        print('Processing case: ' + case_name)
+        logging_handle.info('Processing case: ' + case_name)
 
         start = time.time()
 
@@ -45,5 +49,5 @@ if __name__ == '__main__':
         # Save the result
         itk.imwrite(postprocessed, os.path.join('predictions', case_name + '.nii.gz'))
 
-        print('Processing this case took ' + str(time.time() - start) + ' seconds')
+        logging_handle.info('Processing this case took ' + str(time.time() - start) + ' seconds')
 

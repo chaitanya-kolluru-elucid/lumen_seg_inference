@@ -1,10 +1,14 @@
 import numpy as np
 import itk
+from utils.logger_config import logger
 
 class Postprocessing:
     def __init__(self, config):
         self.config = config['postprocessing_config']
         self.common_config = config['common_config']
+
+        # Create a logger object
+        self.logger = logger.getLogger('Postprocessing')
 
     def postprocess(self, prediction, slicer_to_revert_padding, original_im):
 
