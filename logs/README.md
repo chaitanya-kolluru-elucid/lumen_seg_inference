@@ -1,0 +1,1 @@
+Folder containing log files of gpu usage during inference runs.

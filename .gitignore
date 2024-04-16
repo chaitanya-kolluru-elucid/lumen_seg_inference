@@ -1,6 +1,17 @@
-model_files/
+# Folders with large files
 images/
 predictions/
+
+# Python cache
 __pycache__/
-logs/
-*.pt
+
+# Python virtual environment
+inferencing_venv/
+
+# Model files
+model_files/*.pth 
+model_files/*.pt
+model_files/*.pkl
+
+# Log files
+logs/*.log

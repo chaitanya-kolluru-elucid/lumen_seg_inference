@@ -1,11 +1,16 @@
-from patchify import patchify
 import numpy as np
 import itk
+from torch.nn import functional as F
+import torch
+from utils.logger_config import logger
 
 class Preprocessing:
     def __init__(self, config):
         self.config = config['preprocessing_config']
         self.common_config = config['common_config']
+
+        # Create a logger object
+        self.logger = logger.getLogger('Preprocessing')
 
     def preprocess(self, im):
 
@@ -14,22 +19,16 @@ class Preprocessing:
         arr = arr.astype(np.float32)
         arr = self.normalize_intensity(arr)
 
-        patch_step_size = tuple([int(ps * por) for ps, por in 
-                                 zip(self.common_config['patch_size'], 
-                                     self.common_config['patch_step_size_ratio'])])
+        # Pad the array so that the array size is at least the patch size
+        arr, slicer_to_revert_padding = self.pad_array(arr)
+
+        # Get slicers for patches
+        slicers = self.get_sliding_window_slicers(arr.shape)
         
-        # TODO: Assuming same step size in all three dimensions
-        patch_step_size = patch_step_size[0]
+        # Add an extra axis in the front for channels
+        arr = arr[np.newaxis, :]
 
-        patches = patchify(arr, tuple(self.common_config['patch_size']), step = patch_step_size)
-
-        num_patches = [patches.shape[0], patches.shape[1], patches.shape[2]]
-
-        patches = patches.reshape(-1, self.common_config['patch_size'][0],
-                                  self.common_config['patch_size'][1],
-                                  self.common_config['patch_size'][2])
-
-        return patches, num_patches, arr.shape
+        return arr, slicer_to_revert_padding, slicers
     
     def normalize_intensity(self, arr):
 
@@ -55,3 +54,60 @@ class Preprocessing:
         resampler.Update()
 
         return resampler.GetOutput()
+    
+    def pad_array(self, arr):
+
+        old_shape = np.array(arr.shape)
+        patch_size =  self.common_config['patch_size']
+
+        patch_size = [max(patch_size[i], old_shape[i]) for i in range(len(patch_size))]
+
+        difference = patch_size - old_shape
+        pad_below = difference // 2
+        pad_above = difference // 2 + difference % 2
+        pad_list = [list(i) for i in zip(pad_below, pad_above)]
+
+        if not ((all([i == 0 for i in pad_below])) and (all([i == 0 for i in pad_above]))):
+            res = np.pad(arr, pad_list, 'constant', kwargs= {'value':0})
+        else:
+            res = arr
+
+        pad_list = np.array(pad_list)
+        pad_list[:, 1] = np.array(res.shape) - pad_list[:, 1]
+        slicer = tuple(slice(*i) for i in pad_list)
+        return res, slicer
+    
+    def get_sliding_window_slicers(self, image_size):
+
+        slicers = []
+        
+        steps = self.compute_steps_for_sliding_window(image_size, self.common_config['patch_size'],
+                                                    self.common_config['patch_step_size_ratio'])
+        
+        for sx in steps[0]:
+            for sy in steps[1]:
+                for sz in steps[2]:
+                    slicers.append(
+                        tuple([slice(None), *[slice(si, si + ti) for si, ti in
+                                                zip((sx, sy, sz), self.common_config['patch_size'])]]))
+        return slicers
+
+    def compute_steps_for_sliding_window(self, image_size, tile_size, tile_step_size):
+
+        target_step_sizes_in_voxels = [i * tile_step_size for i in tile_size]
+
+        num_steps = [int(np.ceil((i - k) / j)) + 1 for i, j, k in zip(image_size, target_step_sizes_in_voxels, tile_size)]
+
+        steps = []
+        for dim in range(len(tile_size)):
+            max_step_value = image_size[dim] - tile_size[dim]
+            if num_steps[dim] > 1:
+                actual_step_size = max_step_value / (num_steps[dim] - 1)
+            else:
+                actual_step_size = 0  
+
+            steps_here = [int(np.round(actual_step_size * i)) for i in range(num_steps[dim])]
+
+            steps.append(steps_here)
+
+        return steps
