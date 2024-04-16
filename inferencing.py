@@ -11,7 +11,7 @@ from utils.logger_config import logger
 class Inferencing:
     def __init__(self, config):
 
-        self.tracker = MemTracker()
+        self.gpu_mem_tracker = MemTracker()
 
         self.config = config['inferencing_config']
         self.common_config = config['common_config']
@@ -46,7 +46,9 @@ class Inferencing:
             self.weights = 1
         
         # Create a logger object
-        self.logger = logger.getLogger('Inferencing')
+        self.logger = logger.getLogger('Inferencing')        
+        self.logger.info('Inference will be done on device: ' + self.config['device'])
+        self.logger.info('Results will be processed on device: ' + self.config['results_device'])
 
     def empty_cache(self):
         if self.device.type == 'cuda':
@@ -84,16 +86,16 @@ class Inferencing:
 
         start = datetime.datetime.now()
 
-        self.tracker.track()
+        self.gpu_mem_tracker.track()
         self.model.load_state_dict(self.checkpoint['network_weights'])
         self.model = self.model.to(self.device)
         self.model.eval()
-        self.tracker.track()
+        self.gpu_mem_tracker.track()
 
         arr_tensor = torch.from_numpy(arr)
         predictions = torch.zeros((self.config['num_output_labels'], *arr.shape[1:]), dtype=torch.half, device=self.results_device)
         n_predictions = torch.zeros(arr.shape[1:], dtype=torch.half, device=self.results_device)
-        self.tracker.track()
+        self.gpu_mem_tracker.track()
 
 
         with torch.inference_mode():
@@ -109,6 +111,9 @@ class Inferencing:
 
             start = datetime.datetime.now()
             predictions /= n_predictions
+            del n_predictions
+            self.empty_cache()
+            self.gpu_mem_tracker.track()
             self.logger.info('Division took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')            
             
             start = datetime.datetime.now()
@@ -117,11 +122,14 @@ class Inferencing:
 
             start = datetime.datetime.now()
             predictions = predictions.cpu()
+            self.logger.info('Moving predictions to cpu took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
+            
+            start = datetime.datetime.now()
             predictions = torch.argmax(predictions, axis = 0)
             predictions = np.array(predictions, dtype=np.uint8)
             self.logger.info('Predictions argmax took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
 
         self.empty_cache()
-        self.tracker.track()
+        self.gpu_mem_tracker.track()
 
         return predictions
