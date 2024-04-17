@@ -7,17 +7,18 @@ import datetime
 from scipy.ndimage import gaussian_filter
 from utils.gpu_memtrack import MemTracker
 from utils.logger_config import logger
+from tritonclient.utils import *
+import tritonclient.http as httpclient
 
 class Inferencing:
     def __init__(self, config):
 
+        self.model_name = "in_house_model"
         self.gpu_mem_tracker = MemTracker()
-
         self.config = config['inferencing_config']
         self.common_config = config['common_config']
 
         if self.config['device'] == 'cpu':
-
             import multiprocessing
             torch.set_num_threads(multiprocessing.cpu_count())
             self.device = torch.device('cpu')
@@ -91,23 +92,21 @@ class Inferencing:
         start = datetime.datetime.now()
 
         self.gpu_mem_tracker.track()
-        self.model.load_state_dict(self.checkpoint['network_weights'])
-        self.model = self.model.to(self.device)
-        self.model.eval()
-        self.gpu_mem_tracker.track()
-
-        arr_tensor = torch.from_numpy(arr)
         predictions = torch.zeros((self.config['num_output_labels'], *arr.shape[1:]), dtype=torch.half, device=self.results_device)
         n_predictions = torch.zeros(arr.shape[1:], dtype=torch.half, device=self.results_device)
         self.gpu_mem_tracker.track()
 
-        with torch.inference_mode():
+        # with torch.inference_mode():
+        with httpclient.InferenceServerClient("localhost:8000") as client:
 
             for sl in slicers:
-                patch = arr_tensor[sl][None]
-                patch = patch.to(self.device)
+                patch = arr[sl]
+                inputs = httpclient.InferInput("input__0", patch.shape, datatype="FP32")
+                inputs.set_data_from_numpy(patch)
+                outputs = httpclient.InferRequestedOutput("output__0")
 
-                predictions[sl] +=  torch.softmax(self.model(patch).squeeze(0), axis = 0).to(self.results_device)
+                response = client.infer(self.model_name, inputs=[inputs], outputs=[outputs])
+                predictions[sl] += torch.squeeze(torch.softmax(torch.from_numpy(response.as_numpy("output__0")), axis=1), axis=0).to(self.results_device)
                 n_predictions[sl[1:]] += self.weights
 
             self.logger.info('Inference took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
