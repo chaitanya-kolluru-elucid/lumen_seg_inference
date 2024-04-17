@@ -52,7 +52,7 @@ class Inferencing:
         self.logger = logger.getLogger('Inferencing')        
         self.logger.info('Inference will be done on device: ' + self.config['device'])
         self.logger.info('Results will be processed on device: ' + self.config['results_device'])
-        self.logger.info('Pytorch cuda caching allocator has been set to: ' + str(self.config['disable_cuda_allocator_caching']))
+        self.logger.info('Pytorch cuda caching allocator disable status: ' + str(self.config['disable_cuda_allocator_caching']))
 
     def empty_cache(self):
         if self.device.type == 'cuda':

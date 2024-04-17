@@ -13,7 +13,7 @@ class Postprocessing:
 
     def postprocess(self, prediction, slicer_to_revert_padding, original_im):
 
-        prediction = prediction[*slicer_to_revert_padding]
+        prediction = prediction[tuple(slicer_to_revert_padding)]
 
         im = itk.GetImageFromArray(prediction)
         im.SetDirection(original_im.GetDirection())

@@ -1,0 +1,644 @@
+GPU Memory Track | 16-Apr-24-20:17:01 | Total Tensor Used Memory:0.0    Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:0.0    Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(128, 64, 3, 3, 3)   | Memory: 0.8437 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 13 * Size:(128,)               | Memory: 0.0063 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(4, 320, 1, 1, 1)    | Memory: 0.0048 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(128, 64, 2, 2, 2)   | Memory: 0.25 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(320, 256, 3, 3, 3)  | Memory: 8.4375 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(256, 128, 2, 2, 2)  | Memory: 1.0 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(32, 64, 3, 3, 3)    | Memory: 0.2109 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(128, 256, 3, 3, 3)  | Memory: 3.375 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(320, 256, 2, 2, 2)  | Memory: 2.5 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 2 * Size:(32, 32, 3, 3, 3)    | Memory: 0.2109 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(4, 256, 1, 1, 1)    | Memory: 0.0039 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(32, 1, 3, 3, 3)     | Memory: 0.0032 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(256, 128, 3, 3, 3)  | Memory: 3.375 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 4 * Size:(320, 320, 3, 3, 3)  | Memory: 42.187 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(4, 128, 1, 1, 1)    | Memory: 0.0019 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(64, 32, 2, 2, 2)    | Memory: 0.0625 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 13 * Size:(256,)               | Memory: 0.0126 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 13 * Size:(64,)                | Memory: 0.0031 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 2 * Size:(256, 256, 3, 3, 3)  | Memory: 13.5 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 5 * Size:(4,)                 | Memory: 7.6293 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 13 * Size:(32,)                | Memory: 0.0015 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 2 * Size:(128, 128, 3, 3, 3)  | Memory: 3.375 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(64, 32, 3, 3, 3)    | Memory: 0.2109 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(64, 128, 3, 3, 3)   | Memory: 0.8437 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(4, 64, 1, 1, 1)     | Memory: 0.0009 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 19 * Size:(320,)               | Memory: 0.0231 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(320, 640, 3, 3, 3)  | Memory: 21.093 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(4, 32, 1, 1, 1)     | Memory: 0.0004 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(256, 512, 3, 3, 3)  | Memory: 13.5 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 2 * Size:(64, 64, 3, 3, 3)    | Memory: 0.8437 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
++ | 1 * Size:(320, 320, 1, 2, 2)  | Memory: 1.5625 M | <class 'torch.nn.parameter.Parameter'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+- | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 93: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 97: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 102: infer Total Tensor Used Memory:117.4  Mb Total Allocated Memory:0.0    Mb
+
++ | 1 * Size:(1, 1, 160, 160, 160) | Memory: 15.625 M | <class 'torch.Tensor'> | torch.float32
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 119: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
+
+At /home/chaitanya.kolluru/lumen_seg_inference/inferencing.py line 128: infer Total Tensor Used Memory:133.1  Mb Total Allocated Memory:0.0    Mb
+
