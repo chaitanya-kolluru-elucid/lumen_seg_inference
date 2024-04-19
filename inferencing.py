@@ -47,6 +47,8 @@ class Inferencing:
 
         if self.config['disable_cuda_allocator_caching']:
             os.environ['PYTORCH_NO_CUDA_MEMORY_CACHING'] = '1'
+
+        self.use_mirroring = self.config['use_mirroring']
         
         # Create a logger object
         self.logger = logger.getLogger('Inferencing')        
@@ -107,7 +109,16 @@ class Inferencing:
                 patch = arr_tensor[sl][None]
                 patch = patch.to(self.device)
 
-                predictions[sl] +=  torch.softmax(self.model(patch).squeeze(0), axis = 0).to(self.results_device)
+                prediction = self.model(patch)
+
+                if self.use_mirroring:
+                    axes_combinations = [(2,), (3,), (4,), (2, 3), (2, 4), (3, 4), (2, 3, 4)]
+
+                    for axes in axes_combinations:
+                        prediction += torch.flip(self.network(torch.flip(patch, axes)), axes)
+                    prediction /= (len(axes_combinations) + 1)
+
+                predictions[sl] +=  torch.softmax(prediction.squeeze(0), axis = 0).to(self.results_device)
                 n_predictions[sl[1:]] += self.weights
 
             self.logger.info('Inference took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
