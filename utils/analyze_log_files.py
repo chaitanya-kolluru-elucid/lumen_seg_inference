@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import os
 import distinctipy
+import numpy as np
 
 def plot_scatter(dictionary):
     # Set up the figure and axis
@@ -28,8 +29,8 @@ def plot_scatter(dictionary):
 
 if __name__ == '__main__':
 
-    inference_log_filepath = os.path.join('./logs', '16-Apr-24-20:16:52-run_inference_pipeline.log')
-    memory_usage_log_filepath = os.path.join('./logs', '16-Apr-24-20:16:54-gpu_mem_track.log')
+    inference_log_filepath = os.path.join('./logs', '16-Apr-24-16:27:48-run_inference_pipeline.log')
+    memory_usage_log_filepath = os.path.join('./logs', '16-Apr-24-16:27:49-gpu_mem_track.log')
 
     case_names = []
     inference_times = []
@@ -57,6 +58,11 @@ if __name__ == '__main__':
             
             case_names.append(line.split('Processing case: ')[-1])
 
+    total_processing_times = np.array(timing_dict['Overall processing time'])
+    print('Number of cases processed: ' + str(len(total_processing_times)))
+    print('Total processing time: ' + str(np.sum(total_processing_times)))
+    print('Total processing time per case, median: ' + str(np.median(total_processing_times)))
+    
     plot_scatter(timing_dict)
     plt.savefig('Timing info - inference.png', bbox_inches="tight")
 
