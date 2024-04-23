@@ -18,9 +18,9 @@ if __name__ == '__main__':
     model.train(False)
 
     # sample input size
-    input = torch.randn(1, 1, 160, 160, 160).to(torch.device('cuda:1'))
+    input = torch.randn(1, 1, 160, 160, 160).type(torch.float16).to(torch.device('cuda:1'))
 
     # export the model
-    torch_out = torch.onnx.export(model,              # model being run
-                               input,                       # model input (or a tuple for multiple inputs)
-                               "Model_4x19.onnx", export_params=True) # where to save the model (can be a file or file-like object)
+    torch_out = torch.onnx.export(model.half(),              # model being run
+                                input,                       # model input (or a tuple for multiple inputs)
+                                "Model_4x19.onnx", export_params=True) # where to save the model (can be a file or file-like object)
