@@ -16,7 +16,7 @@ class Preprocessing:
 
         im = self.resample_image(im)
         arr = itk.GetArrayFromImage(im)
-        arr = arr.astype(np.float32)
+        arr = arr.astype(np.float16)
         arr = self.normalize_intensity(arr)
 
         # Pad the array so that the array size is at least the patch size
