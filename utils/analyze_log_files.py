@@ -29,8 +29,8 @@ def plot_scatter(dictionary):
 
 if __name__ == '__main__':
 
-    inference_log_filepath = os.path.join('./logs', '16-Apr-24-16:27:48-run_inference_pipeline.log')
-    memory_usage_log_filepath = os.path.join('./logs', '16-Apr-24-16:27:49-gpu_mem_track.log')
+    inference_log_filepath = os.path.join('./logs', '23-Apr-24-20:43:19-run_inference_pipeline.log')
+    memory_usage_log_filepath = os.path.join('./logs', '23-Apr-24-20:43:21-gpu_mem_track.log')
 
     case_names = []
     inference_times = []
@@ -62,6 +62,8 @@ if __name__ == '__main__':
     print('Number of cases processed: ' + str(len(total_processing_times)))
     print('Total processing time: ' + str(np.sum(total_processing_times)))
     print('Total processing time per case, median: ' + str(np.median(total_processing_times)))
+    print('Total processing time per case, max: ' + str(np.max(total_processing_times)))
+    print('Total processing time per case, min: ' + str(np.min(total_processing_times)))
     
     plot_scatter(timing_dict)
     plt.savefig('Timing info - inference.png', bbox_inches="tight")
