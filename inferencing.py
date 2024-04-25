@@ -91,7 +91,6 @@ class Inferencing:
         self.empty_cache()
 
         start = datetime.datetime.now()
-
         self.gpu_mem_tracker.track()
         predictions = torch.zeros((self.config['num_output_labels'], *arr.shape[1:]), dtype=torch.half, device=self.results_device)
         n_predictions = torch.zeros(arr.shape[1:], dtype=torch.half, device=self.results_device)
@@ -101,14 +100,20 @@ class Inferencing:
         with httpclient.InferenceServerClient("localhost:8000") as client:
 
             for sl in slicers:
+                startpatch = datetime.datetime.now()
                 patch = arr[sl]
-                inputs = httpclient.InferInput("input__0", patch.shape, datatype="FP32")
+                inputs = httpclient.InferInput("input", patch.shape, datatype="FP16")
                 inputs.set_data_from_numpy(patch)
-                outputs = httpclient.InferRequestedOutput("output__0")
-
+                endtime1 = datetime.datetime.now()
+                outputs = httpclient.InferRequestedOutput("output")
+                endtime2 = datetime.datetime.now()
                 response = client.infer(self.model_name, inputs=[inputs], outputs=[outputs])
-                predictions[sl] += torch.squeeze(torch.softmax(torch.from_numpy(response.as_numpy("output__0")), axis=1), axis=0).to(self.results_device)
+                predictions[sl] += torch.squeeze(torch.softmax(torch.from_numpy(response.as_numpy("output")), axis=1), axis=0).to(self.results_device)
                 n_predictions[sl[1:]] += self.weights
+                endtime3 = datetime.datetime.now()
+                self.logger.info('Step1 ' + str((endtime1 - startpatch).microseconds/1000.0) + ' ms.')
+                self.logger.info('Step2 ' + str((endtime2 - endtime1).microseconds/1000.0) + ' ms.')
+                self.logger.info('Step3 ' + str((endtime3 - endtime2).microseconds/1000.0) + ' ms.')
 
             self.logger.info('Inference took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
 

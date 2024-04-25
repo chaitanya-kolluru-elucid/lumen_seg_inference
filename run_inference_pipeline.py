@@ -24,11 +24,10 @@ if __name__ == '__main__':
     postprocess_filter = postprocessing.Postprocessing(config)
 
     image_filelist = sorted(glob.glob(os.path.join(config['common_config']['images_dir'], '*.nii.gz')))
-    
     for k in range(len(image_filelist)):
 
         # Get the case name
-        case_name = os.path.basename(image_filelist[k]).split('_0000.nii.gz')[0]
+        case_name = os.path.basename(image_filelist[k]).split('.nii.gz')[0]
 
         logging_handle.info('Processing case: ' + case_name)
 
@@ -47,6 +46,6 @@ if __name__ == '__main__':
         postprocessed = postprocess_filter.postprocess(prediction, slicer_to_revert_padding, im)
 
         # Save the result
-        itk.imwrite(postprocessed, os.path.join(config['common_config']['preds_dir'], case_name + '.nii.gz'))
+        itk.imwrite(postprocessed, os.path.join(config['common_config']['preds_dir'], case_name + '_pred.nii.gz'))
 
         logging_handle.info('Processing this case took ' + str((datetime.datetime.now() - start).seconds)+ ' seconds')
