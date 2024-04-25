@@ -7,6 +7,8 @@ import datetime
 from scipy.ndimage import gaussian_filter
 from utils.gpu_memtrack import MemTracker
 from utils.logger_config import logger
+from tritonclient.utils import *
+import tritonclient.http as httpclient
 
 class Inferencing:
     def __init__(self, config):
@@ -106,11 +108,11 @@ class Inferencing:
                 inputs.set_data_from_numpy(patch)
                 endtime1 = datetime.datetime.now()
                 outputs = httpclient.InferRequestedOutput("output")
-                endtime2 = datetime.datetime.now()
                 response = client.infer(self.model_name, inputs=[inputs], outputs=[outputs])
+                endtime2 = datetime.datetime.now()
                 predictions[sl] += torch.squeeze(torch.softmax(torch.from_numpy(response.as_numpy("output")), axis=1), axis=0).to(self.results_device)
-                n_predictions[sl[1:]] += self.weights
                 endtime3 = datetime.datetime.now()
+                n_predictions[sl[1:]] += self.weights
                 self.logger.info('Step1 ' + str((endtime1 - startpatch).microseconds/1000.0) + ' ms.')
                 self.logger.info('Step2 ' + str((endtime2 - endtime1).microseconds/1000.0) + ' ms.')
                 self.logger.info('Step3 ' + str((endtime3 - endtime2).microseconds/1000.0) + ' ms.')
