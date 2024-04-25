@@ -14,7 +14,8 @@
         "num_output_labels": 4,
         "results_device": "cpu",
         "gpu_to_use": "1",
-        "disable_cuda_allocator_caching": true
+        "disable_cuda_allocator_caching": true,
+        "run_with_tensorrt":true
     },
     "postprocessing_config": {
         "aorta_keep_largest": true,

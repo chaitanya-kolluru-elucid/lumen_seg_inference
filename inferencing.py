@@ -7,8 +7,6 @@ import datetime
 from scipy.ndimage import gaussian_filter
 from utils.gpu_memtrack import MemTracker
 from utils.logger_config import logger
-from tritonclient.utils import *
-import tritonclient.http as httpclient
 
 class Inferencing:
     def __init__(self, config):
@@ -48,12 +46,15 @@ class Inferencing:
 
         if self.config['disable_cuda_allocator_caching']:
             os.environ['PYTORCH_NO_CUDA_MEMORY_CACHING'] = '1'
+
+        self.use_mirroring = self.config['use_mirroring']
         
         # Create a logger object
         self.logger = logger.getLogger('Inferencing')        
         self.logger.info('Inference will be done on device: ' + self.config['device'])
         self.logger.info('Results will be processed on device: ' + self.config['results_device'])
         self.logger.info('Pytorch cuda caching allocator disable status: ' + str(self.config['disable_cuda_allocator_caching']))
+        self.logger.info('Use mirroring as a test time augmentation: ' + str(self.config['use_mirroring']))
 
     def empty_cache(self):
         if self.device.type == 'cuda':
@@ -113,13 +114,18 @@ class Inferencing:
 
             start = datetime.datetime.now()
             predictions /= n_predictions
+            
+            if self.results_device != 'cpu':
+                predictions = predictions.to('cpu')
+
+            predictions = np.array(predictions)
             del n_predictions
             self.empty_cache()
             self.gpu_mem_tracker.track()
             self.logger.info('Division took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')            
             
             start = datetime.datetime.now()
-            predictions = torch.argmax(predictions, axis = 0).cpu()
+            predictions = np.argmax(predictions, axis = 0)
             predictions = np.array(predictions, dtype=np.uint8)
             self.logger.info('Predictions argmax took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
 

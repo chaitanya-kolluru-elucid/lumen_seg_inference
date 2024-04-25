@@ -3,7 +3,7 @@ import os
 import itk
 import json
 import numpy as np
-import time
+import datetime
 
 import preprocessing 
 import inferencing 
@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
         logging_handle.info('Processing case: ' + case_name)
 
-        start = time.time()
+        start = datetime.datetime.now()
 
         # Get the image
         im = itk.imread(image_filelist[k])
@@ -49,5 +49,4 @@ if __name__ == '__main__':
         # Save the result
         itk.imwrite(postprocessed, os.path.join(config['common_config']['preds_dir'], case_name + '.nii.gz'))
 
-        logging_handle.info('Processing this case took ' + str(time.time() - start) + ' seconds')
-
+        logging_handle.info('Processing this case took ' + str((datetime.datetime.now() - start).seconds)+ ' seconds')
