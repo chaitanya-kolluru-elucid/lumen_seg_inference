@@ -8,6 +8,10 @@ from scipy.ndimage import gaussian_filter
 from utils.gpu_memtrack import MemTracker
 from utils.logger_config import logger
 
+import tensorrt as trt
+from tensor_rt.TRT_inference import TensorRTInfer
+from tqdm import tqdm
+
 class Inferencing:
     def __init__(self, config):
 
@@ -55,6 +59,7 @@ class Inferencing:
         self.logger.info('Inference will be done on device: ' + self.config['device'])
         self.logger.info('Results will be processed on device: ' + self.config['results_device'])
         self.logger.info('Pytorch cuda caching allocator disable status: ' + str(self.config['disable_cuda_allocator_caching']))
+        self.logger.info('Use mirroring as a test time augmentation: ' + str(self.config['use_mirroring']))
 
     def empty_cache(self):
         if self.device.type == 'cuda':
@@ -95,6 +100,7 @@ class Inferencing:
         self.gpu_mem_tracker.track()
         self.model.load_state_dict(self.checkpoint['network_weights'])
         self.model = self.model.to(self.device)
+        self.model = self.model.half()
         self.model.eval()
         self.gpu_mem_tracker.track()
 
@@ -105,33 +111,52 @@ class Inferencing:
 
         with torch.inference_mode():
 
-            for sl in slicers:
-                patch = arr_tensor[sl][None]
-                patch = patch.to(self.device)
+            if not self.config['run_with_tensorrt']:
 
-                prediction = self.model(patch)
+                for sl in slicers:
+                    patch = arr_tensor[sl][None]
+                    patch = patch.to(self.device)
 
-                if self.use_mirroring:
-                    axes_combinations = [(2,), (3,), (4,), (2, 3), (2, 4), (3, 4), (2, 3, 4)]
+                    prediction = self.model(patch)
 
-                    for axes in axes_combinations:
-                        prediction += torch.flip(self.network(torch.flip(patch, axes)), axes)
-                    prediction /= (len(axes_combinations) + 1)
+                    if self.use_mirroring:
+                        axes_combinations = [(2,), (3,), (4,), (2, 3), (2, 4), (3, 4), (2, 3, 4)]
 
-                predictions[sl] +=  torch.softmax(prediction.squeeze(0), axis = 0).to(self.results_device)
-                n_predictions[sl[1:]] += self.weights
+                        for axes in axes_combinations:
+                            prediction += torch.flip(self.model(torch.flip(patch, axes)), axes)
+                        prediction /= (len(axes_combinations) + 1)
+
+                    predictions[sl] +=  torch.softmax(prediction.squeeze(0), axis = 0).to(self.results_device)
+                    n_predictions[sl[1:]] += self.weights
+
+            else:
+
+                trt.init_libnvinfer_plugins(None,'')
+                trt_infer = TensorRTInfer(os.path.join('model_files', 'trt_fp16.engine'))
+
+                for sl in tqdm(slicers):
+                    patch = arr_tensor[sl][None]
+                    prediction= trt_infer.infer(np.array(patch))
+
+                    predictions[sl] +=  torch.softmax(torch.from_numpy(prediction).squeeze(0), axis = 0)
+                    n_predictions[sl[1:]] += self.weights
 
             self.logger.info('Inference took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
 
             start = datetime.datetime.now()
             predictions /= n_predictions
+            
+            if self.results_device != 'cpu':
+                predictions = predictions.to('cpu')
+
+            predictions = np.array(predictions)
             del n_predictions
             self.empty_cache()
             self.gpu_mem_tracker.track()
             self.logger.info('Division took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')            
             
             start = datetime.datetime.now()
-            predictions = torch.argmax(predictions, axis = 0).cpu()
+            predictions = np.argmax(predictions, axis = 0)
             predictions = np.array(predictions, dtype=np.uint8)
             self.logger.info('Predictions argmax took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
 
