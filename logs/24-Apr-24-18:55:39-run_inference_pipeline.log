@@ -1,5 +1,0 @@
-2024-04-24 18:55:41,977 - Inferencing - INFO - Inference will be done on device: gpu
-2024-04-24 18:55:41,977 - Inferencing - INFO - Results will be processed on device: cpu
-2024-04-24 18:55:41,977 - Inferencing - INFO - Pytorch cuda caching allocator disable status: True
-2024-04-24 18:55:41,977 - Inferencing - INFO - Use mirroring as a test time augmentation: True
-2024-04-24 18:55:41,978 - __main__ - INFO - Processing case: Christ_0042

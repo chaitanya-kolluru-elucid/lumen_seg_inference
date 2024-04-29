@@ -9,17 +9,18 @@
         "model_checkpoint_filename": "checkpoint_best.pth",
         "model_architecture_filename": "model.pkl",
         "device": "gpu",
-        "use_gaussian_smoothing": true,
+        "use_gaussian_smoothing": false,
         "use_mirroring": false,
-        "num_output_labels": 4,
         "results_device": "cpu",
         "gpu_to_use": "1",
         "disable_cuda_allocator_caching": true,
-        "run_with_tensorrt":true
+        "run_with_tensorrt":false
     },
     "postprocessing_config": {
         "aorta_keep_largest": true,
-        "aorta_class_value": 3
+        "aorta_class_value": 3,
+        "class_names": ["background", "lumen", "calc", "aorta"],
+        "probs_save_dir": "./probabilities"
     },
     "common_config":{
         "patch_size": [160, 160, 160],
@@ -27,7 +28,9 @@
         "target_spacing": [0.25, 0.25, 0.25],
         "torch_num_threads": 8, 
         "images_dir": "./images",
-        "preds_dir": "./predictions"
+        "preds_dir": "./predictions",
+        "num_output_labels": 4,
+        "save_probabilities": true
     }
 
 }

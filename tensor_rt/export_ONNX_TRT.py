@@ -20,7 +20,7 @@ def main():
     with open(os.path.join('model_files', 'model.pkl'), 'rb') as f:
             model = pickle.load(f)
     model.load_state_dict(checkpoint['network_weights'])
-    model = model.half()
+    #model = model.half()
     model.to(torch.device('cuda:0'))
     model.eval()    
    
@@ -32,7 +32,7 @@ def main():
         #dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}}
 
         # A dummy input is needed to generate the ONNX model
-        dummy_input = torch.randn(1, 1, 160, 160, 160).half().cuda()
+        dummy_input = torch.randn(1, 1, 160, 160, 160).cuda() #.half().cuda()
 
         # A example output needed to tell ONNX export how to properly define output
         #example_output = torch.randn(1*160*160*160, 4)
@@ -79,7 +79,7 @@ def main():
     print('Finished creating engine, took ' + str(time.time() - start) + ' seconds.')
     print('Engine creation done')
 
-    with open('trt.engine', mode='wb') as f:
+    with open('trt_4x26_test.engine', mode='wb') as f:
         f.write(bytearray(engine))#f.write(bytearray(engine.serialize()))
         print("generating file done!")
     

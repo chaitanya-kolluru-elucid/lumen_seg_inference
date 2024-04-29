@@ -41,10 +41,11 @@ if __name__ == '__main__':
         arr, slicer_to_revert_padding, slicers = preprocess_filter.preprocess(im)
 
         # Run inference steps
-        prediction = inference_filter.infer(arr, slicers)
+        prediction_argmax, prediction_probs = inference_filter.infer(arr, slicers)
 
         # Run postprocessing steps
-        postprocessed = postprocess_filter.postprocess(prediction, slicer_to_revert_padding, im)
+        postprocessed = postprocess_filter.postprocess(prediction_argmax, slicer_to_revert_padding, im)
+        postprocess_filter.postprocess_and_save_probabilities(prediction_probs, slicer_to_revert_padding, im, case_name)
 
         # Save the result
         itk.imwrite(postprocessed, os.path.join(config['common_config']['preds_dir'], case_name + '.nii.gz'))

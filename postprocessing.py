@@ -2,11 +2,15 @@ import itk.itkLabelShapeKeepNObjectsImageFilterPython
 import numpy as np
 import itk
 from utils.logger_config import logger
-
+import datetime
+import os
 class Postprocessing:
     def __init__(self, config):
         self.config = config['postprocessing_config']
         self.common_config = config['common_config']
+
+        if not os.path.exists(self.config['probs_save_dir']):
+            os.makedirs(self.config['probs_save_dir'])
 
         # Create a logger object
         self.logger = logger.getLogger('Postprocessing')
@@ -95,3 +99,27 @@ class Postprocessing:
         resampler.Update()
 
         return resampler.GetOutput()
+    
+    def postprocess_and_save_probabilities(self, prediction_probabilities, slicer_to_revert_padding, im, case_name):
+
+        if self.common_config['save_probabilities']:
+            start = datetime.datetime.now()
+
+            for k in range(self.common_config['num_output_labels']):
+                class_name = self.config['class_names'][k]
+
+                current_channel_prediction_probabilities = prediction_probabilities[k, :, :, :]
+                current_channel_prediction_probabilities = current_channel_prediction_probabilities[tuple(slicer_to_revert_padding)]
+
+                image_to_save = itk.GetImageFromArray(current_channel_prediction_probabilities.astype(np.float32))
+                image_to_save.SetDirection(im.GetDirection())
+                image_to_save.SetOrigin(im.GetOrigin())
+                image_to_save.SetSpacing(self.common_config['target_spacing'])
+
+                image_to_save = self.resample_image(image_to_save, im)
+
+                itk.imwrite(image_to_save, os.path.join(self.config['probs_save_dir'], case_name + '_' + class_name + '.nii.gz'))
+
+            self.logger.info('Saving inference probabilities took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
+
+    

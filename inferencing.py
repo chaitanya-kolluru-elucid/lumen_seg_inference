@@ -44,7 +44,7 @@ class Inferencing:
         elif self.config['results_device'] == 'gpu':
             self.results_device = torch.device('cuda:' + self.config['gpu_to_use'])
 
-        if self.config['use_gaussian_smoothing']:
+        if self.config['use_gaussian_smoothing'] and not self.common_config['save_probabilities']:
             self.weights = self.compute_gaussian()
         else:
             self.weights = 1
@@ -105,7 +105,7 @@ class Inferencing:
         self.gpu_mem_tracker.track()
 
         arr_tensor = torch.from_numpy(arr)
-        predictions = torch.zeros((self.config['num_output_labels'], *arr.shape[1:]), dtype=torch.half, device=self.results_device)
+        predictions = torch.zeros((self.common_config['num_output_labels'], *arr.shape[1:]), dtype=torch.half, device=self.results_device)
         n_predictions = torch.zeros(arr.shape[1:], dtype=torch.half, device=self.results_device)
         self.gpu_mem_tracker.track()
 
@@ -113,7 +113,7 @@ class Inferencing:
 
             if not self.config['run_with_tensorrt']:
 
-                for sl in slicers:
+                for sl in tqdm(slicers):
                     patch = arr_tensor[sl][None]
                     patch = patch.to(self.device)
 
@@ -132,7 +132,7 @@ class Inferencing:
             else:
 
                 trt.init_libnvinfer_plugins(None,'')
-                trt_infer = TensorRTInfer(os.path.join('model_files', 'trt_fp16.engine'))
+                trt_infer = TensorRTInfer(os.path.join('model_files', 'trt_4x26_test.engine'))
 
                 for sl in tqdm(slicers):
                     patch = arr_tensor[sl][None]
@@ -153,14 +153,14 @@ class Inferencing:
             del n_predictions
             self.empty_cache()
             self.gpu_mem_tracker.track()
-            self.logger.info('Division took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')            
-            
+            self.logger.info('Division took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')    
+
             start = datetime.datetime.now()
-            predictions = np.argmax(predictions, axis = 0)
-            predictions = np.array(predictions, dtype=np.uint8)
+            predictions_argmax = np.argmax(predictions, axis = 0)
+            predictions_argmax = np.array(predictions_argmax, dtype=np.uint8)
             self.logger.info('Predictions argmax took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
 
         self.empty_cache()
         self.gpu_mem_tracker.track()
 
-        return predictions
+        return predictions_argmax, predictions    

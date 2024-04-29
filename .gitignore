@@ -17,3 +17,6 @@ model_files/*.onnx
 
 # Log files
 logs/*.log
+
+# Model probabilities
+probabilities/
