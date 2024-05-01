@@ -46,6 +46,6 @@ if __name__ == '__main__':
         postprocessed = postprocess_filter.postprocess(prediction, slicer_to_revert_padding, im)
 
         # Save the result
-        itk.imwrite(postprocessed, os.path.join(config['common_config']['preds_dir'], case_name + '_pred.nii.gz'))
+        itk.imwrite(postprocessed, os.path.join(config['common_config']['preds_dir'], case_name + '_pred_ensemble.nii.gz'))
 
         logging_handle.info('Processing this case took ' + str((datetime.datetime.now() - start).seconds)+ ' seconds')

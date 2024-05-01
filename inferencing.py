@@ -13,7 +13,7 @@ import tritonclient.http as httpclient
 class Inferencing:
     def __init__(self, config):
 
-        self.model_name = "in_house_model"
+        self.model_name = "ensemble_model"
         self.gpu_mem_tracker = MemTracker()
         self.config = config['inferencing_config']
         self.common_config = config['common_config']
@@ -93,9 +93,7 @@ class Inferencing:
         self.empty_cache()
 
         start = datetime.datetime.now()
-        self.gpu_mem_tracker.track()
-        predictions = torch.zeros((self.config['num_output_labels'], *arr.shape[1:]), dtype=torch.half, device=self.results_device)
-        n_predictions = torch.zeros(arr.shape[1:], dtype=torch.half, device=self.results_device)
+        predictions = np.zeros(arr.shape,dtype=np.uint8)
         self.gpu_mem_tracker.track()
 
         # with torch.inference_mode():
@@ -104,37 +102,24 @@ class Inferencing:
             for sl in slicers:
                 startpatch = datetime.datetime.now()
                 patch = arr[sl]
-                inputs = httpclient.InferInput("input", patch.shape, datatype="FP16")
+                # Add an extra axis in front to match with the dimension of input
+                patch = patch[np.newaxis, :]
+                inputs = httpclient.InferInput("input_image", patch.shape, datatype="FP16")
                 inputs.set_data_from_numpy(patch)
                 endtime1 = datetime.datetime.now()
-                outputs = httpclient.InferRequestedOutput("output")
+                outputs = httpclient.InferRequestedOutput("postprocessed_output")
                 response = client.infer(self.model_name, inputs=[inputs], outputs=[outputs])
                 endtime2 = datetime.datetime.now()
-                predictions[sl] += torch.squeeze(torch.softmax(torch.from_numpy(response.as_numpy("output")), axis=1), axis=0).to(self.results_device)
+                predictions[sl] += response.as_numpy("postprocessed_output")
                 endtime3 = datetime.datetime.now()
-                n_predictions[sl[1:]] += self.weights
-                self.logger.info('Step1 ' + str((endtime1 - startpatch).microseconds/1000.0) + ' ms.')
-                self.logger.info('Step2 ' + str((endtime2 - endtime1).microseconds/1000.0) + ' ms.')
-                self.logger.info('Step3 ' + str((endtime3 - endtime2).microseconds/1000.0) + ' ms.')
 
-            self.logger.info('Inference took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
+                self.logger.info('Step1-InferInput ' + str((endtime1 - startpatch).microseconds/1000.0) + ' ms.')
+                self.logger.info('Step2-Inference '  + str((endtime2 - endtime1).microseconds/1000.0) + ' ms.')
+                self.logger.info('Step3-Response '   + str((endtime3 - endtime2).microseconds/1000.0) + ' ms.')
 
-            start = datetime.datetime.now()
-            predictions /= n_predictions
-            
-            if self.results_device != 'cpu':
-                predictions = predictions.to('cpu')
+            self.logger.info('Total inference took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
 
             predictions = np.array(predictions)
-            del n_predictions
-            self.empty_cache()
-            self.gpu_mem_tracker.track()
-            self.logger.info('Division took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')            
-            
-            start = datetime.datetime.now()
-            predictions = np.argmax(predictions, axis = 0)
-            predictions = np.array(predictions, dtype=np.uint8)
-            self.logger.info('Predictions argmax took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
 
         self.empty_cache()
         self.gpu_mem_tracker.track()

@@ -25,9 +25,6 @@ class Preprocessing:
         # Get slicers for patches
         slicers = self.get_sliding_window_slicers(arr.shape)
         
-        # Add an extra axis in the front for channels
-        arr = arr[np.newaxis, :]
-
         return arr, slicer_to_revert_padding, slicers
     
     def normalize_intensity(self, arr):
@@ -88,7 +85,7 @@ class Preprocessing:
             for sy in steps[1]:
                 for sz in steps[2]:
                     slicers.append(
-                        tuple([slice(None), *[slice(si, si + ti) for si, ti in
+                        tuple([*[slice(si, si + ti) for si, ti in
                                                 zip((sx, sy, sz), self.common_config['patch_size'])]]))
         return slicers
 
