@@ -20,7 +20,10 @@
         "aorta_keep_largest": true,
         "aorta_class_value": 3,
         "class_names": ["background", "lumen", "calc", "aorta"],
-        "probs_save_dir": "./probabilities"
+        "probs_save_dir": "./probabilities",
+        "root_coordinates_dir": "./root_coordinates",
+        "ensure_connectivity_lumen_calc_aorta": true,
+        "find_root_node_coordinates": true
     },
     "common_config":{
         "patch_size": [160, 160, 160],
@@ -30,7 +33,7 @@
         "images_dir": "./images",
         "preds_dir": "./predictions",
         "num_output_labels": 4,
-        "save_probabilities": true
+        "save_probabilities": false
     }
 
 }

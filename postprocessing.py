@@ -4,6 +4,8 @@ import itk
 from utils.logger_config import logger
 import datetime
 import os
+import json
+
 class Postprocessing:
     def __init__(self, config):
         self.config = config['postprocessing_config']
@@ -15,7 +17,7 @@ class Postprocessing:
         # Create a logger object
         self.logger = logger.getLogger('Postprocessing')
 
-    def postprocess(self, prediction, slicer_to_revert_padding, original_im):
+    def postprocess(self, prediction, slicer_to_revert_padding, original_im, case_name):
 
         prediction = prediction[tuple(slicer_to_revert_padding)]
 
@@ -27,9 +29,230 @@ class Postprocessing:
         im = self.resample_image(im, original_im)
 
         if self.config['aorta_keep_largest']:
+
+            start = datetime.datetime.now()
+
             im = self.keep_largest_cc_for_aorta(im)
 
+            self.logger.info('Keeping largest connected aorta component took' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
+
+        if self.config['ensure_connectivity_lumen_calc_aorta']:
+
+            start = datetime.datetime.now()
+
+            im = self.ensure_connectivity_lumen_calc_aorta(im)
+
+            self.logger.info('Ensuring connectivity for lumen, calc, and aorta took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
+
+        if self.config['find_root_node_coordinates']:
+
+            start = datetime.datetime.now()
+
+            root_mask_arr, reoriented_im, aorta = self.get_root_mask_array(im)
+            root_coordinates = self.get_root_coordinates(root_mask_arr, reoriented_im, aorta)
+
+            if self.config['root_coordinates_dir'] is not None:
+
+                if not os.path.exists(self.config['root_coordinates_dir']):
+                    os.makedirs(self.config['root_coordinates_dir'])
+
+                self.write_root_coordinates_to_file(root_coordinates, case_name)
+            else:
+                self.logger.warning('Find root coordinates flag set to true, but root coordinates directory left empty.')
+
+
+            self.logger.info('Finding root node coordinates took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
+
         return im
+    
+    def write_root_coordinates_to_file(self, root_coordinates, case_name):
+
+        with open(os.path.join(self.config['root_coordinates_dir'], case_name + '_root_coords.json'), 'w') as f:
+            json.dump(root_coordinates, f, indent = 2, sort_keys = True)
+    
+    def get_root_coordinates(self, root_mask_arr, reoriented_im, aorta):
+
+        # Keep the two largest connected components in the array
+        # Find the centroid, find which is right/left based on anterior/posterior
+
+        root_im = itk.GetImageFromArray(root_mask_arr.astype(np.uint8))
+        root_im.SetSpacing(reoriented_im.GetSpacing())
+        root_im.SetDirection(reoriented_im.GetDirection())
+        root_im.SetOrigin(reoriented_im.GetOrigin())
+
+        ccFilter = itk.ConnectedComponentImageFilter.New(root_im)
+        ccFilter.Update()
+        labels = ccFilter.GetOutput()
+
+        labelShapeStatisticsFilter = itk.LabelImageToShapeLabelMapFilter.IUC3LM3.New(labels.astype(itk.UC))
+        labelShapeStatisticsFilter.SetBackgroundValue(0)
+        labelShapeStatisticsFilter.SetComputeOrientedBoundingBox(False)
+        labelShapeStatisticsFilter.SetComputePerimeter(False)
+        labelShapeStatisticsFilter.SetComputeFeretDiameter(False)
+        labelShapeStatisticsFilter.Update()
+        labelShapeStatistics = labelShapeStatisticsFilter.GetOutput()
+
+        num_labels = labelShapeStatistics.GetNumberOfLabelObjects()
+        self.logger.info('Found ' + str(num_labels) + ' connected components in the root mask, will use largest two.')
+
+        match num_labels:
+
+            case 0:
+                return dict()
+            
+            case 1:
+                centroids = []
+                centroids.append(np.array(labelShapeStatistics.GetCentroid(1)))
+
+                ccFilter = itk.ConnectedComponentImageFilter.New(aorta)
+                ccFilter.Update()
+
+                # Ensure only one connected aorta component
+                labelShapeKeepNObjectsImageFilter = itk.LabelShapeKeepNObjectsImageFilter[itk.UC].New()
+                labelShapeKeepNObjectsImageFilter.SetInput(ccFilter.GetOutput().astype(itk.UC))
+                labelShapeKeepNObjectsImageFilter.SetBackgroundValue(0)
+                labelShapeKeepNObjectsImageFilter.SetNumberOfObjects(1)
+                labelShapeKeepNObjectsImageFilter.SetAttribute(100)
+                labelShapeKeepNObjectsImageFilter.Update()
+                aorta_labels = labelShapeKeepNObjectsImageFilter.GetOutput()
+
+                aortaLabelShapeStatisticsFilter = itk.LabelImageToShapeLabelMapFilter.IUC3LM3.New(aorta_labels.astype(itk.UC))
+                aortaLabelShapeStatisticsFilter.SetBackgroundValue(0)
+                aortaLabelShapeStatisticsFilter.SetComputeOrientedBoundingBox(False)
+                aortaLabelShapeStatisticsFilter.SetComputePerimeter(False)
+                aortaLabelShapeStatisticsFilter.SetComputeFeretDiameter(False)
+                aortaLabelShapeStatisticsFilter.Update()
+                aortaLabelShapeStatistics = aortaLabelShapeStatisticsFilter.GetOutput()
+
+                aorta_centroid = np.array(aortaLabelShapeStatistics.GetNthLabelObject(0).GetCentroid())
+
+                if aorta_centroid[0][1] >= centroids[0][1]:
+                    root_coordinates['Right ostia'] = list(centroids[0])
+                else:
+                    root_coordinates['Left ostia'] = list(centroids[0])
+
+                return root_coordinates
+
+            case _:
+
+                # Get the indices and sizes of connected components
+                labels_sizes = [(labelShapeStatistics.GetNthLabelObject(label_id).GetNumberOfPixels(), label_id) for label_id in range(0, num_labels)]
+                labels_sizes.sort(reverse=True)  # Sort by size in descending order
+
+                # Get the two largest connected components
+                largest_labels = [labels_sizes[i][1] for i in range(2)]
+
+                # Calculate centroids of the two largest connected components
+                root_coordinates = {}
+                centroids = []
+
+                for label_id in largest_labels:
+                    centroid = np.array(labelShapeStatistics.GetNthLabelObject(label_id).GetCentroid())
+                    centroids.append(centroid)
+
+                if centroids[0][1] >= centroids[1][1]:
+                    root_coordinates['Left ostia'] = list(centroids[0])
+                    root_coordinates['Right ostia'] = list(centroids[1])
+
+                else:
+                    root_coordinates['Left ostia'] = list(centroids[1])
+                    root_coordinates['Right ostia'] = list(centroids[0])
+
+                return root_coordinates
+            
+    def get_root_mask_array(self, im):
+
+        # Orient the image to ITK_COORDINATE_ORIENTATION_RIP
+        itk_so_enums = itk.SpatialOrientationEnums 
+        itk_rai = itk_so_enums.ValidCoordinateOrientations_ITK_COORDINATE_ORIENTATION_RAI
+
+        # This allows us to find which positions are anatomically anterior/posterior based on indices
+        orientFilter = itk.OrientImageFilter.New(im)
+        orientFilter.UseImageDirectionOn()
+        orientFilter.SetDesiredCoordinateOrientation(itk_rai)
+        orientFilter.Update()
+
+        reoriented_im = orientFilter.GetOutput()
+
+        # Find a maximum of two root nodes in the lumen + calc mask, touching the aorta
+        # If only one, use the aorta mask to find if it is left or right
+        InputImageType = itk.Image[itk.UC, 3]
+
+        # Get the aorta and lumen masks individually
+        thresholdFilter = itk.BinaryThresholdImageFilter.New(reoriented_im)
+        thresholdFilter.SetLowerThreshold(3)
+        thresholdFilter.SetUpperThreshold(3)
+        thresholdFilter.SetInsideValue(1)
+        thresholdFilter.SetOutsideValue(0)
+        thresholdFilter.Update()
+        aorta = thresholdFilter.GetOutput()
+
+        thresholdFilter = itk.BinaryThresholdImageFilter.New(reoriented_im)
+        thresholdFilter.SetLowerThreshold(1)
+        thresholdFilter.SetUpperThreshold(2)
+        thresholdFilter.SetInsideValue(1)
+        thresholdFilter.SetOutsideValue(0)
+        thresholdFilter.Update()
+        lumen = thresholdFilter.GetOutput()
+
+        # Dilate the aorta by one voxel
+        StructuringElementType = itk.FlatStructuringElement[3]
+        structuringElement = StructuringElementType.Ball(1)
+
+        DilateFilterType = itk.BinaryDilateImageFilter[InputImageType, InputImageType, StructuringElementType].New()
+        dilateFilter = DilateFilterType.New()
+        dilateFilter.SetInput(aorta)
+        dilateFilter.SetKernel(structuringElement)
+        dilateFilter.SetForegroundValue(1)
+        dilateFilter.Update()
+        aorta_dilated = dilateFilter.GetOutput()
+
+        aorta_dilated_arr = itk.GetArrayFromImage(aorta_dilated)
+        lumen_arr = itk.GetArrayFromImage(lumen)
+
+        # Get the mask from which root coordinates should be picked
+        root_mask_arr = np.zeros_like(aorta_dilated_arr)
+        root_mask_arr[(aorta_dilated_arr == 1) & (lumen_arr == 1)] = 1
+
+        return root_mask_arr, reoriented_im, aorta
+
+    def ensure_connectivity_lumen_calc_aorta(self, im):
+
+        # Given that we have a singly connected aorta at this point
+        # we now want to ensure lumen + calc + aorta mask is all connected and just one object
+
+        arr = itk.GetArrayFromImage(im)
+
+        thresholdFilter = itk.BinaryThresholdImageFilter.New(im)
+        thresholdFilter.SetLowerThreshold(1)
+        thresholdFilter.SetUpperThreshold(3)
+        thresholdFilter.SetInsideValue(1)
+        thresholdFilter.SetOutsideValue(0)
+        thresholdFilter.Update()
+
+        ccFilter = itk.ConnectedComponentImageFilter.New(thresholdFilter.GetOutput())
+        ccFilter.Update()
+        combined_mask_im = ccFilter.GetOutput()
+
+        OutputImageType = itk.Image[itk.UC, 3]
+        labelShapeKeepNObjectsImageFilter = itk.LabelShapeKeepNObjectsImageFilter[OutputImageType].New()
+        labelShapeKeepNObjectsImageFilter.SetInput(combined_mask_im.astype(itk.UC))
+        labelShapeKeepNObjectsImageFilter.SetBackgroundValue(0)
+        labelShapeKeepNObjectsImageFilter.SetNumberOfObjects(1)
+        labelShapeKeepNObjectsImageFilter.SetAttribute(100)
+        labelShapeKeepNObjectsImageFilter.Update()
+        largest_component_combined_mask = labelShapeKeepNObjectsImageFilter.GetOutput()
+
+        largest_component_combined_mask_arr = itk.GetArrayFromImage(largest_component_combined_mask)
+        updated_arr = np.zeros_like(arr)
+        updated_arr[largest_component_combined_mask_arr != 0] = arr[largest_component_combined_mask_arr != 0]
+
+        output_im = itk.GetImageFromArray(updated_arr)
+        output_im.SetSpacing(im.GetSpacing())
+        output_im.SetDirection(im.GetDirection())
+        output_im.SetOrigin(im.GetOrigin())
+
+        return output_im
 
     def keep_largest_cc_for_aorta(self, im):
 
