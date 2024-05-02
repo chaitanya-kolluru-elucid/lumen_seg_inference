@@ -29,8 +29,8 @@ def plot_scatter(dictionary):
 
 if __name__ == '__main__':
 
-    inference_log_filepath = os.path.join('./logs', '25-Apr-24-21:04:30-run_inference_pipeline.log')
-    memory_usage_log_filepath = os.path.join('./logs', '25-Apr-24-21:04:32-gpu_mem_track.log')
+    inference_log_filepath = os.path.join('./logs', '02-May-24-04:33:00-run_inference_pipeline.log')
+    memory_usage_log_filepath = os.path.join('./logs', '02-May-24-04:33:01-gpu_mem_track.log')
 
     case_names = []
     inference_times = []
@@ -54,7 +54,7 @@ if __name__ == '__main__':
 
             timing_dict[steps[step_index]].append(int(lines[i+1].split('Inference took ')[-1].split(' seconds')[0]))
             timing_dict[steps[step_index + 1]].append(int(lines[i+3].split('Predictions argmax took ')[-1].split(' seconds')[0]))
-            timing_dict[steps[step_index + 2]].append(float(lines[i+5].split('Processing this case took ')[-1].split(' seconds')[0]))
+            timing_dict[steps[step_index + 2]].append(float(lines[i+9].split('Processing this case took ')[-1].split(' seconds')[0]))
             
             case_names.append(line.split('Processing case: ')[-1])
 
