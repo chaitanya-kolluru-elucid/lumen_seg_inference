@@ -102,7 +102,7 @@ class Inferencing:
             for sl in slicers:
                 startpatch = datetime.datetime.now()
                 patch = arr[sl]
-                # Add an extra axis in front to match with the dimension of input
+                # Add an extra axis in front for batch dimension in Triton
                 patch = patch[np.newaxis, :]
                 inputs = httpclient.InferInput("input_image", patch.shape, datatype="FP16")
                 inputs.set_data_from_numpy(patch)
