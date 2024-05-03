@@ -108,7 +108,7 @@ class Postprocessing:
                 ccFilter.Update()
 
                 # Ensure only one connected aorta component
-                labelShapeKeepNObjectsImageFilter = itk.LabelShapeKeepNObjectsImageFilter[itk.UC].New()
+                labelShapeKeepNObjectsImageFilter = itk.LabelShapeKeepNObjectsImageFilter[itk.Image[itk.UC, 3]].New()
                 labelShapeKeepNObjectsImageFilter.SetInput(ccFilter.GetOutput().astype(itk.UC))
                 labelShapeKeepNObjectsImageFilter.SetBackgroundValue(0)
                 labelShapeKeepNObjectsImageFilter.SetNumberOfObjects(1)
