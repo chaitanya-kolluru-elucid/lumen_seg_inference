@@ -1,0 +1,106 @@
+Clone Triton server repository
+1. mkdir ~/Triton
+2. git clone https://github.com/triton-inference-server/server.git
+
+
+
+Test "Serve a Model in 3 Easy Steps"
+1. From one terminal or ssh session (if running on hendrix):
+> cd ~/Triton/server/docs/examples/
+> docker run --gpus=1 --rm -p8000:8000 -p8001:8001 -p8002:8002 -v${PWD}/model_repository:/models tritonserver:latest tritonserver --model-repository=/models
+> docker run --gpus=1 --rm -p8000:8000 -p8001:8001 -p8002:8002 -v${PWD}/model_repository:/models nvcr.io/nvidia/tritonserver:24.02-py3 tritonserver --model-repository=/models
+2. From another terminal or ssh session (if running on hendrix):
+> curl -v localhost:8000/v2/health/ready
+> docker run -it --rm --net=host nvcr.io/nvidia/tritonserver:24.02-py3-sdk
+
+
+
+Deploy a PyTorch model (https://github.com/triton-inference-server/tutorials/blob/main/Quick_Deploy/PyTorch/README.md) 
+1. cd ~/Triton 
+2. clone triton-inference-server/tutorials repo (https://github.com/triton-inference-server/tutorials)
+> git clone https://github.com/triton-inference-server/tutorials.git
+3. cd /home/tsang/Triton/tutorials/Quick_Deploy/PyTorch
+4. docker run -it --gpus all -v ${PWD}:/workspace nvcr.io/nvidia/pytorch:24.02-py3
+5. python export.py
+6. exit docker and copy config.pbtxt and model.pt to model repository
+> mkdir -p /home/tsang/Triton/server/docs/examples/resnet50/1
+> cp config.pbtxt /home/tsang/Triton/server/docs/examples/resnet50/
+> cp model.pt /home/tsang/Triton/server/docs/examples/resnet50/1/
+7. From one ssh session to hendrix:
+> cd ~/Triton/server/docs/examples/
+> sudo docker run --gpus all --rm -p 8000:8000 -p 8001:8001 -p 8002:8002 -v ${PWD}/model_repository:/models tritonserver:latest tritonserver --model-repository=/models
+8. From another ssh session to hendrix:
+> cd ~/Triton/tutorials/Quick_Deploy/PyTorch
+> docker run -it --net=host -v ${PWD}:/workspace/ nvcr.io/nvidia/tritonserver:24.02-py3-sdk bash
+> pip install torchvision
+> wget  -O img1.jpg "https://www.hakaimagazine.com/wp-content/uploads/header-gulf-birds.jpg"
+> python client.py
+
+
+
+To deploy and test RSIP lowres model (using pre-built Triton Inference Server docker image in NVIDIA GPU Cloud NGC)
+1. clone "automated_vessel_extraction_python" repository
+> git clone https://github.com/ElucidBioimaging/automated_vessel_extraction_python.git
+2. From one terminal or ssh session (if running in hendrix)
+> cd ~/automated_vessel_extraction_python/Triton/server
+> docker run --gpus=1 --rm -p8000:8000 -p8001:8001 -p8002:8002 -v${PWD}/model_repository:/models nvcr.io/nvidia/tritonserver:24.02-py3 tritonserver --model-repository=/models
+3. From another terminal or ssh session (if running in hendrix)
+> cd ~/automated_vessel_extraction_python/Triton/client
+> docker run -it --net=host -v ${PWD}:/workspace/ nvcr.io/nvidia/tritonserver:24.02-py3-sdk bash
+> pip install nibabel
+> python client_rsip.py /workspace/OLVZ_00001.nii.gz
+
+
+
+To deploy and test in_house model (using pre-built Triton Inference Server docker image in NVIDIA GPU Cloud NGC)
+1. clone "chaitanya-kolluru-elucid/lumen_seg_inference" repository
+> git clone https://github.com/chaitanya-kolluru-elucid/lumen_seg_inference.git
+> git checkout Triton
+2. Copy an image to /inst/tsang/lumen_seg_inference/images
+3. Create a predictions folder (i.e. /inst/tsang/lumen_seg_inference/predictions
+4. From one terminal or ssh session (if running in hendrix)
+> cd /inst/tsang/automated_vessel_extraction_python/Triton/server
+> docker run --gpus=1 --rm -p8000:8000 -p8001:8001 -p8002:8002 -v${PWD}/model_repository:/models nvcr.io/nvidia/tritonserver:24.02-py3 tritonserver --model-repository=/models
+5. From another terminal or ssh session (if running in hendrix)
+> cd /inst/tsang/lumen_seg_inference
+> mkdir predictions
+> docker run -it --net=host -v ${PWD}:/workspace/ nvcr.io/nvidia/tritonserver:24.02-py3-sdk bash
+> pip install itk torch scipy dynamic_network_architectures
+> python run_inference_pipeline.py
+
+
+
+To test ensemble in_house model (https://github.com/triton-inference-server/python_backend/tree/main/examples/preprocessing)
+(https://github.com/triton-inference-server/python_backend?tab=readme-ov-file#creating-custom-execution-environments)
+1. For Triton server
+1.1. Create a conda environment and install torch package
+> conda new --name inferencing_venv --python=3.10
+> conda activate inferencing_venv
+> MAKE SURE pip is installed in the conda environment and not use the pip in the system python package
+> pip install torch torchvision torchaudio
+> conda install -c conda-forge conda-pack
+> conda-pack
+1.2. Copy the inferencing_venv.tar.gz to /inst/tsang/automated_vessel_extraction_python/Triton/server/model_repository
+1.3. Go to the model_repository folder, create a folder and untar the file into the folder
+> cd /inst/tsang/automated_vessel_extraction_python/Triton/server/model_repository
+> mkdir -p in_house_model_postprocessing/inferencing_venv
+> tar -xvf inferencing_venv.tar.gz -C in_house_model_postprocessing/inferencing_venv
+1.4. From one terminal or ssh session (if running in hendrix)
+> cd /inst/tsang/automated_vessel_extraction_python/Triton/server
+> docker run --gpus=all -it --shm-size=256m --rm -p8000:8000 -p8001:8001 -p8002:8002 -v$(pwd):/workspace/ -v/$(pwd)/model_repository:/models nvcr.io/nvidia/tritonserver:24.02-py3 bash
+> tritonserver --model-repository=/models --log-file=Triton_server_$(date "+%Y.%m.%d-%H.%M.%S").log
+
+2. For Triton client
+2.1. Add required python libraries based on nvcr.io/nvidia/tritonserver:24.02-py3-sdk docker image (https://stackoverflow.com/questions/58191215/how-to-add-python-libraries-to-docker-image)
+2.2. Create a Dockerfile
+> cd /inst/tsang/lumen_seg_inference
+> vi Dockerfile
+2.3. Add the following lines to the Dockerfile
+    FROM nvcr.io/nvidia/tritonserver:24.02-py3-sdk
+    RUN pip install itk torch scipy dynamic_network_architectures
+2.4. Build a new docker image using the Dockerfile and name it elucid-tritonserver-24.02-py3-sdk
+> docker build -t elucid-tritonserver-24.02-py3-sdk .
+2.5. The new image is now available for use, can be listed in the "docker image ls" command
+2.6. Run the new docker image to start the client
+> docker run -it --net=host -v ${PWD}:/workspace/ elucid-tritonserver-24.02-py3-sdk:latest bash
+> python run_inference_pipeline.py

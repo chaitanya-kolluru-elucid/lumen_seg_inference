@@ -1,0 +1,9 @@
+Steps to build TensorRT engine from ONNX model:
+
+follow the steps in https://github.com/NVIDIA/TensorRT/tree/main/quickstart/deploy_to_triton
+1. ssh to hendrix
+2. cd /inst/tsang/automated_vessel_extraction_python/Triton/server/trt
+3. docker run -it --gpus all -v ${PWD}:/trt_optimize nvcr.io/nvidia/tensorrt:24.02-py3
+4. cd /trt_optimize
+5. python onnx-trt.py
+6. polygraphy inspect model model.plan --model-type engine

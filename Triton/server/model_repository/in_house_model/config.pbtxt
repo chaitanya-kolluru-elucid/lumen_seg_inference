@@ -1,0 +1,17 @@
+name: "in_house_model"
+backend: "tensorrt"
+max_batch_size : 1
+input [
+  {
+    name: "input"
+    data_type: TYPE_FP16
+    dims: [ 1, 160, 160, 160 ]
+  }
+]
+output [
+  {
+    name: "output"
+    data_type: TYPE_FP16
+    dims: [ 4, 160, 160, 160 ]
+  }
+]
