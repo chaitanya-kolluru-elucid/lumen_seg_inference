@@ -76,19 +76,20 @@ To test ensemble in_house model (https://github.com/triton-inference-server/pyth
 1.1. Create a conda environment and install torch package
 > conda new --name inferencing_venv --python=3.10
 > conda activate inferencing_venv
-> MAKE SURE pip is installed in the conda environment and not use the pip in the system python package
+> MAKE SURE pip is installed in the conda environment and do not use the pip in the system python package
 > pip install torch torchvision torchaudio
 > conda install -c conda-forge conda-pack
 > conda-pack
-1.2. Copy the inferencing_venv.tar.gz to /inst/tsang/automated_vessel_extraction_python/Triton/server/model_repository
+1.2. Copy the inferencing_venv.tar.gz to /inst/tsang/lumen_seg_inference/Triton/server/model_repository
 1.3. Go to the model_repository folder, create a folder and untar the file into the folder
-> cd /inst/tsang/automated_vessel_extraction_python/Triton/server/model_repository
+> cd /inst/tsang/lumen_seg_inference/Triton/server/model_repository
 > mkdir -p in_house_model_postprocessing/inferencing_venv
 > tar -xvf inferencing_venv.tar.gz -C in_house_model_postprocessing/inferencing_venv
 1.4. From one terminal or ssh session (if running in hendrix)
-> cd /inst/tsang/automated_vessel_extraction_python/Triton/server
-> docker run --gpus=all -it --shm-size=256m --rm -p8000:8000 -p8001:8001 -p8002:8002 -v$(pwd):/workspace/ -v/$(pwd)/model_repository:/models nvcr.io/nvidia/tritonserver:24.02-py3 bash
-> tritonserver --model-repository=/models --log-file=Triton_server_$(date "+%Y.%m.%d-%H.%M.%S").log
+> cd /inst/tsang/lumen_seg_inference/Triton/server
+> docker run --gpus=all -it --shm-size=1g --rm -p8000:8000 -p8001:8001 -p8002:8002 -v$(pwd):/workspace/ -v/$(pwd)/model_repository:/models nvcr.io/nvidia/tritonserver:24.02-py3 bash
+> tritonserver --model-repository=/models --cuda-memory-pool-byte-size 0:536870912 --cuda-memory-pool-byte-size 1:536870912
+ --log-file=Triton_server_$(date "+%Y.%m.%d-%H.%M.%S").log
 
 2. For Triton client
 2.1. Add required python libraries based on nvcr.io/nvidia/tritonserver:24.02-py3-sdk docker image (https://stackoverflow.com/questions/58191215/how-to-add-python-libraries-to-docker-image)
@@ -100,7 +101,7 @@ To test ensemble in_house model (https://github.com/triton-inference-server/pyth
     RUN pip install itk torch scipy dynamic_network_architectures
 2.4. Build a new docker image using the Dockerfile and name it elucid-tritonserver-24.02-py3-sdk
 > docker build -t elucid-tritonserver-24.02-py3-sdk .
-2.5. The new image is now available for use, can be listed in the "docker image ls" command
+2.5. The new image is now available for use, it should be listed in the "docker image ls" command output
 2.6. Run the new docker image to start the client
 > docker run -it --net=host -v ${PWD}:/workspace/ elucid-tritonserver-24.02-py3-sdk:latest bash
 > python run_inference_pipeline.py

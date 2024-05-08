@@ -1,0 +1,6 @@
+Load ensemble model in Triton that also performs pre- and post-processing steps on the server. 
+
+The asynchronous client code follows this example: 
+https://github.com/triton-inference-server/client/blob/main/src/python/examples/simple_http_async_infer_client.py
+
+Post-processing is done in the GPU. Patch inferencing is done asynchronously.

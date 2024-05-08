@@ -2,7 +2,6 @@ import numpy as np
 import itk
 import torch
 import os
-import sys
 import pickle
 import datetime
 from scipy.ndimage import gaussian_filter
@@ -15,7 +14,7 @@ class Inferencing:
     def __init__(self, config):
 
         self.model_name = "ensemble_model"
-        # self.gpu_mem_tracker = MemTracker()
+        self.gpu_mem_tracker = MemTracker()
         self.config = config['inferencing_config']
         self.common_config = config['common_config']
 
@@ -94,56 +93,35 @@ class Inferencing:
         self.empty_cache()
 
         start = datetime.datetime.now()
-        predictions = np.zeros(arr.shape, dtype=np.uint8)
-        # self.gpu_mem_tracker.track()
+        predictions = np.zeros(arr.shape,dtype=np.uint8)
+        self.gpu_mem_tracker.track()
 
         # with torch.inference_mode():
-        request_count = len(slicers)
-        self.logger.info(f"Number of requests = {request_count}")
-        try:
-            # Need to specify large enough concurrency to issue all the
-            # inference requests to the server in parallel, let's try 20
-            triton_client = httpclient.InferenceServerClient(url="localhost:8000", concurrency=20)
-        except Exception as e:
-            print("context creation failed: " + str(e))
-            sys.exit()
+        with httpclient.InferenceServerClient("localhost:8000") as client:
 
-        async_requests = []
-        sent_count = 0
-        for sl in slicers:
-            startpatch = datetime.datetime.now()
-            patch = arr[sl]
-            # Add an extra axis in front for batch dimension in Triton
-            patch = patch[np.newaxis, :]
-            endtime1 = datetime.datetime.now()
-            inputs = httpclient.InferInput("input_image", patch.shape, datatype="FP16")
-            inputs.set_data_from_numpy(patch)
-            outputs = httpclient.InferRequestedOutput("postprocessed_output")
-            # Asynchronous inference call.
-            sent_count += 1
-            async_requests.append({"sl_patch": sl,
-                                   "infer": triton_client.async_infer(model_name=self.model_name, request_id=str(sent_count), inputs=[inputs], outputs=[outputs])
-                                  }
-                                 )
-            endtime2 = datetime.datetime.now()
-            self.logger.info('Request ID: '  + str(sent_count))
-            self.logger.info('Step1-InferInput ' + str((endtime1 - startpatch).microseconds/1000.0) + ' ms.')
-            self.logger.info('Step2-Inference '  + str((endtime2 - endtime1).microseconds/1000.0) + ' ms.')
-        
-        for async_request in async_requests:
-            # Get the result from the initiated asynchronous inference request.
-            # Note the call will block till the server responds.
-            resp_starttime = datetime.datetime.now()
-            response = async_request["infer"].get_result()
-            self.logger.info(f"Response ID: {response.get_response()['id']}")
-            predictions[async_request["sl_patch"]] = response.as_numpy("postprocessed_output")
-            resp_endtime = datetime.datetime.now()
-            self.logger.info('Step3-Response ' + str((resp_endtime - resp_starttime).microseconds/1000.0) + ' ms.')
+            for sl in slicers:
+                startpatch = datetime.datetime.now()
+                patch = arr[sl]
+                # Add an extra axis in front for batch dimension in Triton
+                patch = patch[np.newaxis, :]
+                inputs = httpclient.InferInput("input_image", patch.shape, datatype="FP16")
+                inputs.set_data_from_numpy(patch)
+                endtime1 = datetime.datetime.now()
+                outputs = httpclient.InferRequestedOutput("postprocessed_output")
+                response = client.infer(self.model_name, inputs=[inputs], outputs=[outputs])
+                endtime2 = datetime.datetime.now()
+                predictions[sl] = response.as_numpy("postprocessed_output")
+                endtime3 = datetime.datetime.now()
 
-        self.logger.info('Total inference took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
-        predictions = np.array(predictions)
+                self.logger.info('Step1-InferInput ' + str((endtime1 - startpatch).microseconds/1000.0) + ' ms.')
+                self.logger.info('Step2-Inference '  + str((endtime2 - endtime1).microseconds/1000.0) + ' ms.')
+                self.logger.info('Step3-Response '   + str((endtime3 - endtime2).microseconds/1000.0) + ' ms.')
+
+            self.logger.info('Total inference took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
+
+            predictions = np.array(predictions)
 
         self.empty_cache()
-        # self.gpu_mem_tracker.track()
+        self.gpu_mem_tracker.track()
 
         return predictions

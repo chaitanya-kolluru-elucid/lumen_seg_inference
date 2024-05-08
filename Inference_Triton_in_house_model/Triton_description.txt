@@ -1,0 +1,1 @@
+Only load in_house model in Triton server, pre- and post-processing are performed on the client side in CPU

@@ -1,0 +1,3 @@
+Load ensemble model in Triton that also performs pre- and post-processing steps on the server. 
+
+Test 2 scenarios of running post-processing on CPU vs GPU -> this involves changing the model_repository/in_house_post_processing/config.pbtxt file to set FORCE_CPU_ONLY_INPUT_TENSORS 
