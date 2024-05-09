@@ -23,7 +23,8 @@
         "probs_save_dir": "./probabilities",
         "root_coordinates_dir": "./root_coordinates",
         "ensure_connectivity_lumen_calc_aorta": true,
-        "find_root_node_coordinates": true
+        "find_root_node_coordinates": true,
+        "split_lca_rca_and_match_rsip": true
     },
     "common_config":{
         "patch_size": [160, 160, 160],

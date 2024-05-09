@@ -63,7 +63,97 @@ class Postprocessing:
 
             self.logger.info('Finding root node coordinates took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
 
+        if self.config['split_lca_rca_and_match_rsip']:
+
+            start = datetime.datetime.now()
+
+            im = self.split_lca_rca(im, root_coordinates)
+            im = self.change_labels_to_match_rsip(im)
+
+            self.logger.info('Split LCA/RCA and changing labels to match RSIP took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
+
         return im
+    
+    def change_labels_to_match_rsip(self, im):
+
+        relabel_filter = itk.ChangeLabelImageFilter[type(im), type(im)].New()
+        relabel_filter.SetInput(im)
+
+        # RSIP convention: 1 - aorta, 2, 3 - left/right lumen, 5,6 - left/right calc
+        change_map = {4:2, 5:3, 6:5, 7:6, 3:1}
+        relabel_filter.SetChangeMap(change_map)   
+
+        relabel_filter.Update()
+    
+    def split_lca_rca(self, im, root_coordinates):
+        thresholdFilter = itk.BinaryThresholdImageFilter.New(im)
+        thresholdFilter.SetLowerThreshold(1)
+        thresholdFilter.SetUpperThreshold(2)
+        thresholdFilter.SetInsideValue(1)
+        thresholdFilter.SetOutsideValue(0)
+        thresholdFilter.Update()
+        lumen_and_calc = thresholdFilter.GetOutput()
+
+        # Find the connected lumen and calc component in which the ostia points are inside
+        # Label them appropriately as left and right
+        ccFilter = itk.ConnectedComponentImageFilter.New(lumen_and_calc)
+        ccFilter.Update()
+        lumen_and_calc_labels = ccFilter.GetOutput()
+        lumen_and_calc_labels_arr = itk.GetArrayFromImage(lumen_and_calc_labels)
+        left_and_right_labels_arr = np.zeros_like(lumen_and_calc_labels_arr)
+
+        if root_coordinates["Left ostia"] is not None:
+            current_point = root_coordinates["Left ostia"]
+            left_label_value = lumen_and_calc_labels.GetPixel(lumen_and_calc_labels.TransformPhysicalPointToIndex(current_point))
+            left_and_right_labels_arr[lumen_and_calc_labels_arr == left_label_value] = 1
+
+        if root_coordinates["Right ostia"] is not None:
+            current_point = root_coordinates["Right ostia"]
+            right_label_value = lumen_and_calc_labels.GetPixel(lumen_and_calc_labels.TransformPhysicalPointToIndex(current_point))
+            left_and_right_labels_arr[lumen_and_calc_labels_arr == right_label_value] = 2
+        
+        thresholdFilter = itk.BinaryThresholdImageFilter.New(im)
+        thresholdFilter.SetLowerThreshold(1)
+        thresholdFilter.SetUpperThreshold(1)
+        thresholdFilter.SetInsideValue(1)
+        thresholdFilter.SetOutsideValue(0)
+        thresholdFilter.Update()
+        lumen = thresholdFilter.GetOutput()
+        lumen_arr = itk.GetArrayFromImage(lumen)
+        lumen_arr[left_and_right_labels_arr == 1] = 4
+        lumen_arr[left_and_right_labels_arr == 2] = 5
+
+        thresholdFilter.SetLowerThreshold(2)
+        thresholdFilter.SetUpperThreshold(2)
+        thresholdFilter.SetInsideValue(1)
+        thresholdFilter.SetOutsideValue(0)
+        thresholdFilter.Update()
+        calc = thresholdFilter.GetOutput()
+        calc_arr = itk.GetArrayFromImage(calc)
+        calc_arr[left_and_right_labels_arr == 1] = 6
+        calc_arr[left_and_right_labels_arr == 2] = 7
+
+        # Sanity check to remove any lumen/calc that is not left/right
+        lumen_arr[lumen_arr == 1] = 0
+        calc_arr[calc_arr == 1] = 0
+
+        thresholdFilter.SetLowerThreshold(3)
+        thresholdFilter.SetUpperThreshold(3)
+        thresholdFilter.SetInsideValue(3)
+        thresholdFilter.SetOutsideValue(0)
+        thresholdFilter.Update()
+        aorta = thresholdFilter.GetOutput()
+        aorta_arr = itk.GetArrayFromImage(aorta)
+
+        # Left lumen - 4, Right lumen - 5, Left calc - 6, Right calc - 7, aorta - 3
+        combined_mask_arr = lumen_arr + calc_arr + aorta_arr
+        combined_mask_arr = combined_mask_arr.astype(np.uint8)
+        combined_mask = itk.GetImageFromArray(combined_mask_arr)
+        combined_mask.SetSpacing(im.GetSpacing())
+        combined_mask.SetDirection(im.GetDirection())
+        combined_mask.SetOrigin(im.GetOrigin())
+
+        return combined_mask            
     
     def write_root_coordinates_to_file(self, root_coordinates, case_name):
 
@@ -128,8 +218,10 @@ class Postprocessing:
 
                 if aorta_centroid[0][1] >= centroids[0][1]:
                     root_coordinates['Right ostia'] = list(centroids[0])
+                    root_coordinates['Left ostia'] = []
                 else:
                     root_coordinates['Left ostia'] = list(centroids[0])
+                    root_coordinates['Right ostia'] = []
 
                 return root_coordinates
 
