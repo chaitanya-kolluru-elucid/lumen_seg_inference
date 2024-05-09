@@ -34,7 +34,7 @@ class Postprocessing:
 
             im = self.keep_largest_cc_for_aorta(im)
 
-            self.logger.info('Keeping largest connected aorta component took' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
+            self.logger.info('Keeping largest connected aorta component took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')
 
         if self.config['ensure_connectivity_lumen_calc_aorta']:
 

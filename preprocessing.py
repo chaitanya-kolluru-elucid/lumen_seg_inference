@@ -3,6 +3,7 @@ import itk
 from torch.nn import functional as F
 import torch
 from utils.logger_config import logger
+import datetime
 
 class Preprocessing:
     def __init__(self, config):
@@ -14,17 +15,25 @@ class Preprocessing:
 
     def preprocess(self, im):
 
+        start = datetime.datetime.now()
+
         im = self.resample_image(im)
         arr = itk.GetArrayFromImage(im)
         arr = arr.astype(np.float16)
         arr = self.normalize_intensity(arr)
 
+        self.logger.info('Reading image and normalization took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')  
+
         # Pad the array so that the array size is at least the patch size
+        start = datetime.datetime.now()
         arr, slicer_to_revert_padding = self.pad_array(arr)
+        self.logger.info('Padding array took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')  
 
         # Get slicers for patches
-        slicers = self.get_sliding_window_slicers(arr.shape)
-        
+        start = datetime.datetime.now()
+        slicers = self.get_sliding_window_slicers(arr.shape)        
+        self.logger.info('Calculating slicers for patches took ' + str((datetime.datetime.now() - start).seconds) + ' seconds.')  
+
         # Add an extra axis in the front for channels
         arr = arr[np.newaxis, :]
 
