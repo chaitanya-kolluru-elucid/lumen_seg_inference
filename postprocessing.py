@@ -1,4 +1,3 @@
-import itk.itkLabelShapeKeepNObjectsImageFilterPython
 import numpy as np
 import itk
 from utils.logger_config import logger
