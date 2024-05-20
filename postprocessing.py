@@ -86,12 +86,25 @@ class Postprocessing:
     
     def split_lca_rca(self, im, root_coordinates):
         thresholdFilter = itk.BinaryThresholdImageFilter.New(im)
-        thresholdFilter.SetLowerThreshold(1)
-        thresholdFilter.SetUpperThreshold(2)
+        thresholdFilter.SetLowerThreshold(self.config['lumen_class_value'])
+        thresholdFilter.SetUpperThreshold(self.config['lumen_class_value'])
         thresholdFilter.SetInsideValue(1)
         thresholdFilter.SetOutsideValue(0)
         thresholdFilter.Update()
-        lumen_and_calc = thresholdFilter.GetOutput()
+        lumen = thresholdFilter.GetOutput()
+
+        thresholdFilter.SetLowerThreshold(self.config['calc_class_value'])
+        thresholdFilter.SetUpperThreshold(self.config['calc_class_value'])
+        thresholdFilter.SetInsideValue(1)
+        thresholdFilter.SetOutsideValue(0)
+        thresholdFilter.Update()
+        calc = thresholdFilter.GetOutput()
+
+        addFilter = itk.AddImageFilter[type(lumen), type(calc), type(calc)].New()
+        addFilter.SetInput1(lumen)
+        addFilter.SetInput2(calc)
+        addFilter.Update()
+        lumen_and_calc = addFilter.GetOutput()
 
         # Find the connected lumen and calc component in which the ostia points are inside
         # Label them appropriately as left and right
@@ -111,23 +124,10 @@ class Postprocessing:
             right_label_value = lumen_and_calc_labels.GetPixel(lumen_and_calc_labels.TransformPhysicalPointToIndex(current_point))
             left_and_right_labels_arr[lumen_and_calc_labels_arr == right_label_value] = 2
         
-        thresholdFilter = itk.BinaryThresholdImageFilter.New(im)
-        thresholdFilter.SetLowerThreshold(1)
-        thresholdFilter.SetUpperThreshold(1)
-        thresholdFilter.SetInsideValue(1)
-        thresholdFilter.SetOutsideValue(0)
-        thresholdFilter.Update()
-        lumen = thresholdFilter.GetOutput()
         lumen_arr = itk.GetArrayFromImage(lumen)
         lumen_arr[left_and_right_labels_arr == 1] = 4
         lumen_arr[left_and_right_labels_arr == 2] = 5
 
-        thresholdFilter.SetLowerThreshold(2)
-        thresholdFilter.SetUpperThreshold(2)
-        thresholdFilter.SetInsideValue(1)
-        thresholdFilter.SetOutsideValue(0)
-        thresholdFilter.Update()
-        calc = thresholdFilter.GetOutput()
         calc_arr = itk.GetArrayFromImage(calc)
         calc_arr[left_and_right_labels_arr == 1] = 6
         calc_arr[left_and_right_labels_arr == 2] = 7
@@ -136,8 +136,8 @@ class Postprocessing:
         lumen_arr[lumen_arr == 1] = 0
         calc_arr[calc_arr == 1] = 0
 
-        thresholdFilter.SetLowerThreshold(3)
-        thresholdFilter.SetUpperThreshold(3)
+        thresholdFilter.SetLowerThreshold(self.config['aorta_class_value'])
+        thresholdFilter.SetUpperThreshold(self.config['aorta_class_value'])
         thresholdFilter.SetInsideValue(3)
         thresholdFilter.SetOutsideValue(0)
         thresholdFilter.Update()
@@ -270,21 +270,35 @@ class Postprocessing:
         InputImageType = itk.Image[itk.UC, 3]
 
         # Get the aorta and lumen masks individually
-        thresholdFilter = itk.BinaryThresholdImageFilter.New(reoriented_im)
-        thresholdFilter.SetLowerThreshold(3)
-        thresholdFilter.SetUpperThreshold(3)
-        thresholdFilter.SetInsideValue(1)
-        thresholdFilter.SetOutsideValue(0)
-        thresholdFilter.Update()
-        aorta = thresholdFilter.GetOutput()
+        aortaThresholdFilter = itk.BinaryThresholdImageFilter.New(reoriented_im)
+        aortaThresholdFilter.SetLowerThreshold(self.config['aorta_class_value'])
+        aortaThresholdFilter.SetUpperThreshold(self.config['aorta_class_value'])
+        aortaThresholdFilter.SetInsideValue(1)
+        aortaThresholdFilter.SetOutsideValue(0)
+        aortaThresholdFilter.Update()
+        aorta = aortaThresholdFilter.GetOutput()
 
-        thresholdFilter = itk.BinaryThresholdImageFilter.New(reoriented_im)
-        thresholdFilter.SetLowerThreshold(1)
-        thresholdFilter.SetUpperThreshold(2)
-        thresholdFilter.SetInsideValue(1)
-        thresholdFilter.SetOutsideValue(0)
-        thresholdFilter.Update()
-        lumen = thresholdFilter.GetOutput()
+        lumenThresholdFilter = itk.BinaryThresholdImageFilter.New(reoriented_im)
+        lumenThresholdFilter.SetLowerThreshold(self.config['lumen_class_value'])
+        lumenThresholdFilter.SetUpperThreshold(self.config['lumen_class_value'])
+        lumenThresholdFilter.SetInsideValue(1)
+        lumenThresholdFilter.SetOutsideValue(0)
+        lumenThresholdFilter.Update()
+        lumen = lumenThresholdFilter.GetOutput()
+
+        calcThresholdFilter = itk.BinaryThresholdImageFilter.New(reoriented_im)
+        calcThresholdFilter.SetLowerThreshold(self.config['calc_class_value'])
+        calcThresholdFilter.SetUpperThreshold(self.config['calc_class_value'])
+        calcThresholdFilter.SetInsideValue(1)
+        calcThresholdFilter.SetOutsideValue(0)
+        calcThresholdFilter.Update()
+        calc = calcThresholdFilter.GetOutput()
+
+        addFilter = itk.AddImageFilter[type(lumen), type(calc), type(calc)].New()
+        addFilter.SetInput1(lumen)
+        addFilter.SetInput2(calc)
+        addFilter.Update()
+        lumen_and_calc = addFilter.GetOutput()
 
         # Dilate the aorta by one voxel
         StructuringElementType = itk.FlatStructuringElement[3]
@@ -299,11 +313,11 @@ class Postprocessing:
         aorta_dilated = dilateFilter.GetOutput()
 
         aorta_dilated_arr = itk.GetArrayFromImage(aorta_dilated)
-        lumen_arr = itk.GetArrayFromImage(lumen)
+        lumen_and_calc_arr = itk.GetArrayFromImage(lumen_and_calc)
 
         # Get the mask from which root coordinates should be picked
         root_mask_arr = np.zeros_like(aorta_dilated_arr)
-        root_mask_arr[(aorta_dilated_arr == 1) & (lumen_arr == 1)] = 1
+        root_mask_arr[(aorta_dilated_arr == 1) & (lumen_and_calc_arr == 1)] = 1
 
         return root_mask_arr, reoriented_im, aorta
 
@@ -312,11 +326,14 @@ class Postprocessing:
         # Given that we have a singly connected aorta at this point
         # we now want to ensure lumen + calc + aorta mask is all connected and just one object
 
+        # TODO: Assumes that the labels are consecutive numbers, else threshold logic below will fail
+        minimum_label = np.min([self.config['aorta_class_value'], self.config['lumen_class_value'], self.config['calc_class_value']])
+        maximum_label = np.max([self.config['aorta_class_value'], self.config['lumen_class_value'], self.config['calc_class_value']])
         arr = itk.GetArrayFromImage(im)
 
         thresholdFilter = itk.BinaryThresholdImageFilter.New(im)
-        thresholdFilter.SetLowerThreshold(1)
-        thresholdFilter.SetUpperThreshold(3)
+        thresholdFilter.SetLowerThreshold(minimum_label)
+        thresholdFilter.SetUpperThreshold(maximum_label)
         thresholdFilter.SetInsideValue(1)
         thresholdFilter.SetOutsideValue(0)
         thresholdFilter.Update()

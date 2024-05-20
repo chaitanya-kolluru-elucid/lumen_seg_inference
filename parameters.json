@@ -18,6 +18,8 @@
     },
     "postprocessing_config": {
         "aorta_keep_largest": true,
+        "lumen_class_value": 1,
+        "calc_class_value": 2,
         "aorta_class_value": 3,
         "class_names": ["background", "lumen", "calc", "aorta"],
         "probs_save_dir": "./probabilities",
