@@ -24,33 +24,65 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-name: "in_house_model_postprocessing"
-backend: "python"
+name: "ensemble_model"
+platform: "ensemble"
 max_batch_size: 1
 input [
-{
-    name: "in_house_model_postprocessing_input"
+  {
+    name: "input_image"
     data_type: TYPE_FP16
-    dims: [ 4, 160, 160, 160 ]
-}
+    dims: [ 160, 160, 160 ]
+  }
 ]
-
 output [
-{
-    name: "in_house_model_postprocessing_output"
+  {
+    name: "postprocessed_output"
     data_type: TYPE_UINT8
     dims: [ 160, 160, 160 ]
-}
+  }
 ]
 
-instance_group [{ kind: KIND_GPU }]
-
-parameters: [{
-  key: "EXECUTION_ENV_PATH",
-  value: {string_value: "$$TRITON_MODEL_DIRECTORY/inferencing_venv"}
-},
-{
-  key: "FORCE_CPU_ONLY_INPUT_TENSORS",
-  value: {string_value: "no"}
+ensemble_scheduling {
+  step [
+    {
+      model_name: "in_house_model_preprocessing"
+      model_version: -1
+      input_map {
+        key: "in_house_model_preprocessing_input"
+        value: "input_image"
+      }
+      output_map {
+        key: "in_house_model_preprocessing_output"
+        value: "preprocessed_output"
+      }
+    },
+    {
+      model_name: "in_house_model"
+      model_version: -1
+      input_map {
+        key: "input"
+        value: "preprocessed_output"
+      }
+      output_map {
+        key: "output"
+        value: "model_output"
+      }
+    },
+    {
+      model_name: "in_house_model_postprocessing"
+      model_version: -1
+      input_map {
+        key: "in_house_model_postprocessing_input"
+        value: "model_output"
+      }
+      input_map {
+        key: "in_house_model_postprocessing_original_input"
+        value: "input_image"
+      }
+      output_map {
+        key: "in_house_model_postprocessing_output"
+        value: "postprocessed_output"
+      }
+    }
+  ]
 }
-]

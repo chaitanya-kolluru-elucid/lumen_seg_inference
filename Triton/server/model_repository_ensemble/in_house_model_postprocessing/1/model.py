@@ -93,7 +93,6 @@ class TritonPythonModel:
           be the same as `requests`
         """
         logger = pb_utils.Logger
-        logger.log_info(f"In {__file__}:execute()")
         output0_dtype = self.output0_dtype
 
         responses = []
@@ -105,21 +104,33 @@ class TritonPythonModel:
             in_1 = pb_utils.get_input_tensor_by_name(
                 request, "in_house_model_postprocessing_input"
             )
-
+            in_2 = pb_utils.get_input_tensor_by_name(
+                request, "in_house_model_postprocessing_original_input"
+            )
+            request_id = request.request_id()
             predictions = None
             if pb_utils.Tensor.is_cpu(in_1):
-                logger.log_info(f"Input is on CPU")
+                logger.log_info(f"In {__file__}:execute(), request_id = {request_id}, input 1 is on CPU")
                 in_1 = in_1.as_numpy()
                 predictions = torch.squeeze(torch.softmax(torch.from_numpy(in_1),dim=1), axis=0).numpy()
                 predictions = np.argmax(predictions, axis = 0)
                 predictions = np.array(predictions, dtype=np.uint8)
             else:
-                logger.log_info(f"Input is on GPU")
+                logger.log_info(f"In {__file__}:execute(), input 1 is on GPU")
                 # convert a Python backend tensor to a PyTorch tensor without making any copies
-                in_1_pytorch_tensor = from_dlpack(in_1.to_dlpack())
-                predictions = torch.squeeze(torch.softmax(in_1_pytorch_tensor,dim=1), axis=0)
-                predictions = torch.argmax(predictions, axis = 0)
-                predictions = predictions.detach().to('cpu').numpy()
+                try:
+                    in_1_pytorch_tensor = from_dlpack(in_1.to_dlpack())
+                    predictions = torch.squeeze(torch.softmax(in_1_pytorch_tensor,dim=1), axis=0)
+                    predictions = torch.argmax(predictions, axis = 0)
+                    predictions = predictions.detach().to('cpu').numpy()
+
+                    if pb_utils.Tensor.is_cpu(in_2):
+                        logger.log_info(f"In {__file__}:execute(), request_id = {request_id}, input 2 is on CPU, image mean intensity = {np.mean(in_2.as_numpy())}")
+                    else:
+                        logger.log_info(f"In {__file__}:execute(), request_id = {request_id}, input 2 is on GPU")
+                except:
+                    logger.log_info(f"possibly error to convert Python backend tensor to a PyTorch tensor - raising TritonModelException")
+                    raise pb_utils.TritonModelException("An error occurred during postprocessing.")
 
             out_tensor_0 = pb_utils.Tensor(
                 "in_house_model_postprocessing_output", predictions.astype(output0_dtype)

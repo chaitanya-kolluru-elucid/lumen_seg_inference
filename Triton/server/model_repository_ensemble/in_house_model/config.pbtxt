@@ -15,3 +15,9 @@ output [
     dims: [ 4, 160, 160, 160 ]
   }
 ]
+instance_group [
+  {
+    count: 2
+    kind: KIND_GPU
+  }
+]

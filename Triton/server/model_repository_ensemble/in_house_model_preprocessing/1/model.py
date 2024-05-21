@@ -30,6 +30,10 @@ import math
 
 import numpy as np
 
+import torch
+from torch.utils.dlpack import from_dlpack
+from torch.utils.dlpack import to_dlpack
+
 # triton_python_backend_utils is available in every Triton Python model. You
 # need to use this module to create inference requests and responses. It also
 # contains some utility functions for extracting information from model_config
@@ -98,7 +102,6 @@ class TritonPythonModel:
           be the same as `requests`
         """
         logger = pb_utils.Logger
-        logger.log_info(f"In {__file__}:execute()")
         output0_dtype = self.output0_dtype
 
         responses = []
@@ -110,19 +113,29 @@ class TritonPythonModel:
             in_1 = pb_utils.get_input_tensor_by_name(
                 request, "in_house_model_preprocessing_input"
             )
-            
-            def normalize_intensity(img):
-                img = np.clip(img, self.preprocessing_config['percentile_00_5'], self.preprocessing_config['percentile_99_5'])
-                img = (img - self.preprocessing_config['mean']) / self.preprocessing_config['std']
-                return img
+            request_id = request.request_id()
+            image_out = None
+            if pb_utils.Tensor.is_cpu(in_1):
+                in_image = in_1.as_numpy()
+                logger.log_info(f"In {__file__}:execute(), request_id = {request_id}, input is on CPU, image mean intensity = {np.mean(in_image)}")
+                image_proc = np.clip(in_image, self.preprocessing_config['percentile_00_5'], self.preprocessing_config['percentile_99_5'])
+                image_proc = (image_proc - self.preprocessing_config['mean']) / self.preprocessing_config['std']
+                # Add an extra axis in front for batch dimension
+                image_proc = image_proc[np.newaxis, :]
+                # Convert numpy to PyTorch tensor and put on GPU
+                image_out = torch.from_numpy(image_proc).to(device='cuda')
+            else:
+                logger.log_info(f"In {__file__}:execute(), request_id = {request_id}, input is on GPU")
+                # convert a Python backend tensor to a PyTorch tensor without making any copies
+                in_1_pytorch_tensor = from_dlpack(in_1.to_dlpack())
+                image_proc = torch.clip(in_1_pytorch_tensor, self.preprocessing_config['percentile_00_5'], self.preprocessing_config['percentile_99_5'])
+                image_proc = torch.div(torch.sub(image_proc, self.preprocessing_config['mean']), self.preprocessing_config['std'])
+                # Add an extra axis in front for batch dimension
+                image_out = torch.unsqueeze(image_proc, 0)
 
-            in_image = in_1.as_numpy()
-            image_proc = normalize_intensity(in_image)
-            # Add an extra axis in front for batch dimension
-            image_proc = image_proc[np.newaxis, :]
-            out_tensor_0 = pb_utils.Tensor(
-                "in_house_model_preprocessing_output", image_proc.astype(output0_dtype)
-            )
+            # convert a PyTorch tensor to a Python backend tensor
+            out_tensor_0 = pb_utils.Tensor.from_dlpack("in_house_model_preprocessing_output", to_dlpack(image_out))
+            # out_tensor_0 = pb_utils.Tensor("in_house_model_preprocessing_output", image_proc.astype(output0_dtype))
 
             # Create InferenceResponse. You can set an error here in case
             # there was a problem with handling this inference request.
