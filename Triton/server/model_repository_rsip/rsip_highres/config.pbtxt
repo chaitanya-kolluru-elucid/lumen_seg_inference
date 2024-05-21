@@ -1,0 +1,19 @@
+name: "rsip_highres"
+platform: "pytorch_libtorch"
+max_batch_size: 1
+input [
+  {
+    name: "input__0"
+    data_type: TYPE_FP32
+    format: FORMAT_NCHW
+    dims: [ 80, 80, 80 ]
+    reshape { shape: [ 1, 80, 80, 80 ] }
+  }
+]
+output [
+  {
+    name: "output__0"
+    data_type: TYPE_FP32
+    dims: [ 2, 80, 80, 80 ]
+  }
+]
