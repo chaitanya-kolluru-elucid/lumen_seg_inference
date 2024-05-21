@@ -114,13 +114,13 @@ class Postprocessing:
         lumen_and_calc_labels_arr = itk.GetArrayFromImage(lumen_and_calc_labels)
         left_and_right_labels_arr = np.zeros_like(lumen_and_calc_labels_arr)
 
-        if root_coordinates["Left ostia"] is not None:
-            current_point = root_coordinates["Left ostia"]
+        if root_coordinates["LeftOstium"] is not None:
+            current_point = root_coordinates["LeftOstium"]
             left_label_value = lumen_and_calc_labels.GetPixel(lumen_and_calc_labels.TransformPhysicalPointToIndex(current_point))
             left_and_right_labels_arr[lumen_and_calc_labels_arr == left_label_value] = 1
 
-        if root_coordinates["Right ostia"] is not None:
-            current_point = root_coordinates["Right ostia"]
+        if root_coordinates["RightOstium"] is not None:
+            current_point = root_coordinates["RightOstium"]
             right_label_value = lumen_and_calc_labels.GetPixel(lumen_and_calc_labels.TransformPhysicalPointToIndex(current_point))
             left_and_right_labels_arr[lumen_and_calc_labels_arr == right_label_value] = 2
         
@@ -216,11 +216,11 @@ class Postprocessing:
                 aorta_centroid = np.array(aortaLabelShapeStatistics.GetNthLabelObject(0).GetCentroid())
 
                 if aorta_centroid[0][1] >= centroids[0][1]:
-                    root_coordinates['Right ostia'] = list(centroids[0])
-                    root_coordinates['Left ostia'] = []
+                    root_coordinates['RightOstium'] = list(centroids[0])
+                    root_coordinates['LeftOstium'] = []
                 else:
-                    root_coordinates['Left ostia'] = list(centroids[0])
-                    root_coordinates['Right ostia'] = []
+                    root_coordinates['LeftOstium'] = list(centroids[0])
+                    root_coordinates['RightOstium'] = []
 
                 return root_coordinates
 
@@ -242,12 +242,12 @@ class Postprocessing:
                     centroids.append(centroid)
 
                 if centroids[0][1] >= centroids[1][1]:
-                    root_coordinates['Left ostia'] = list(centroids[0])
-                    root_coordinates['Right ostia'] = list(centroids[1])
+                    root_coordinates['LeftOstium'] = list(centroids[0])
+                    root_coordinates['RightOstium'] = list(centroids[1])
 
                 else:
-                    root_coordinates['Left ostia'] = list(centroids[1])
-                    root_coordinates['Right ostia'] = list(centroids[0])
+                    root_coordinates['LeftOstium'] = list(centroids[1])
+                    root_coordinates['RightOstium'] = list(centroids[0])
 
                 return root_coordinates
             
